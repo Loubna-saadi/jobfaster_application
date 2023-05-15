@@ -1,13 +1,14 @@
 // TODO Implement this library.import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class FirestoreService {
-  final CollectionReference _usersCollection = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _employersCollection =
+      FirebaseFirestore.instance.collection('employers');
 
-  Future<void> uploadUserData(String name, String familyName, String phone, String email, String imageUrl, String cvUrl) async {
+  Future<void> uploadUserData(String name, String familyName, String phone,
+      String email, String imageUrl, String cvUrl) async {
     try {
-      await _usersCollection.add({
+      await _employersCollection.add({
         'name': name,
         'familyName': familyName,
         'phone': phone,
@@ -21,4 +22,3 @@ class FirestoreService {
     }
   }
 }
-
