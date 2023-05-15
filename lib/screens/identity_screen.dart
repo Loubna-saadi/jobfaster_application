@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-// import 'package:jobfaster_application/screens/owner_screen.dart';
+import 'package:jobfaster_application/screens/employer_screen.dart';
 // import 'package:jobfaster_application/screens/student_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -118,7 +118,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 100),
                 child: TextButton(
                   onPressed: () {
-                    // Navigator.pushNamed(context, OwnerScreen.screenRoute);
+                    Navigator.pushNamed(context, EmployerScreen.screenRoute);
                   },
                   child: Column(
                     children: [

@@ -3,6 +3,7 @@ import 'package:jobfaster_application/screens/registration_screen.dart';
 import 'package:jobfaster_application/screens/signin_screen.dart';
 import 'package:jobfaster_application/screens/identity_screen.dart';
 import 'screens/welcome_screen.dart';
+import 'package:jobfaster_application/screens/employer_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         RegistrationScreen.screenRoutes:(context)=>const RegistrationScreen(),
         Home.screenRoute: (context) => const Home(),
         IdentityScreen.screenRoute: (context) => const IdentityScreen(),
+        EmployerScreen.screenRoute: (context) => const EmployerScreen(),
       },
     );
   }
