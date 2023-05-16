@@ -18,7 +18,8 @@ class _TestScreenState extends State<TestScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  late File _image;
+  // late File _image;
+   File? _image; // Updated line
   final picker = ImagePicker();
 
   Future<void> _submitForm() async {
@@ -149,5 +150,10 @@ class _TestScreenState extends State<TestScreen> {
         ),
       ),
     );
+  }
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<File?>('_image', _image));
   }
 }
