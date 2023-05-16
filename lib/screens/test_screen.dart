@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,42 +22,42 @@ class _TestScreenState extends State<TestScreen> {
  
   final picker = ImagePicker();
 
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      final name = _nameController.text;
-      final phone = _phoneController.text;
+Future<void> _submitForm() async {
+  if (_formKey.currentState!.validate()) {
+    final name = _nameController.text;
+    final phone = _phoneController.text;
 
-      try {
-        // Upload the image to Firebase Storage
-        final imageName = DateTime.now().microsecondsSinceEpoch.toString();
-        final firebase_storage.Reference storageRef =
-            firebase_storage.FirebaseStorage.instance.ref().child(imageName);
-        await storageRef.putFile(_image!);
+    try {
+      // Upload the image to Firebase Storage
+      final imageName = DateTime.now().microsecondsSinceEpoch.toString();
+      final firebase_storage.Reference storageRef =
+          firebase_storage.FirebaseStorage.instance.ref().child(imageName);
+      await storageRef.putFile(_image!);
 
-        // Get the download URL of the uploaded image
-        final imageUrl = await storageRef.getDownloadURL();
+      // Get the download URL of the uploaded image
+      final imageUrl = await storageRef.getDownloadURL();
 
-        // Store the data in Firestore
-        await FirebaseFirestore.instance.collection('test').add({
-          'name': name,
-          'phone': phone,
-          'profileImage': imageUrl,
-        });
+      // Store the data in Firestore
+      await FirebaseFirestore.instance.collection('test').add({
+        'name': name,
+        'phone': phone,
+        'profileImage': imageUrl,
+      });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Data submitted successfully')),
-        );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Data submitted successfully')),
+      );
 
-        _nameController.clear();
-        _phoneController.clear();
-      } catch (e) {
-  print(e.toString()); // Print the error message to the console
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('Error submitting data')),
-  );
-}
+      _nameController.clear();
+      _phoneController.clear();
+    } catch (e) {
+      print(e.toString()); // Print the error message to the console
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error submitting data')),
+      );
     }
   }
+}
 
 Future<void> _getImageFromGallery() async {
   final pickedFile = await picker.pickImage(source: ImageSource.gallery);

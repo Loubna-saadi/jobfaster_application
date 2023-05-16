@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:jobfaster_application/screens/registration_screen.dart';
 import 'package:jobfaster_application/screens/signin_screen.dart';
