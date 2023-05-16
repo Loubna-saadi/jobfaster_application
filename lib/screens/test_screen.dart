@@ -18,8 +18,8 @@ class _TestScreenState extends State<TestScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  // late File _image;
-   File? _image; // Updated line
+  late File _image;
+ 
   final picker = ImagePicker();
 
   Future<void> _submitForm() async {
@@ -58,24 +58,15 @@ class _TestScreenState extends State<TestScreen> {
     }
   }
 
-  Future<void> _getImageFromGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+Future<void> _getImageFromGallery() async {
+  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        Future<void> _getImageFromGallery() async {
-          final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-          setState(() {
-            if (pickedFile != null) {
-              _image = File(pickedFile.path);
-            }
-          });
-        }
-      }
-    });
-  }
+  setState(() {
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -150,10 +141,5 @@ class _TestScreenState extends State<TestScreen> {
         ),
       ),
     );
-  }
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<File?>('_image', _image));
   }
 }
