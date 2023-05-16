@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:file_picker/file_picker.dart';
 
 class TestScreen extends StatefulWidget {
   static const String screenRoute = 'test_screen';
@@ -16,58 +17,96 @@ class TestScreen extends StatefulWidget {
 class _TestScreenState extends State<TestScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _familyNameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _specialtyController = TextEditingController();
   // late File _image;
   File? _image; // Updated line
- 
+  File? _cv;
+
   final picker = ImagePicker();
 
-Future<void> _submitForm() async {
-  if (_formKey.currentState!.validate()) {
-    final name = _nameController.text;
-    final phone = _phoneController.text;
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      final name = _nameController.text;
+      final familyName = _familyNameController.text;
+      final email = _emailController.text;
+      final phone = _phoneController.text;
+      final city = _cityController.text;
+      final specialty = _specialtyController.text;
 
-    try {
-      // Upload the image to Firebase Storage
-      final imageName = DateTime.now().microsecondsSinceEpoch.toString();
-      final firebase_storage.Reference storageRef =
-          firebase_storage.FirebaseStorage.instance.ref().child(imageName);
-      await storageRef.putFile(_image!);
+      try {
+        // Upload the image to Firebase Storage
+        final imageName = DateTime.now().microsecondsSinceEpoch.toString();
+        final firebase_storage.Reference storageRef =
+            firebase_storage.FirebaseStorage.instance.ref().child(imageName);
+        await storageRef.putFile(_image!);
 
-      // Get the download URL of the uploaded image
-      final imageUrl = await storageRef.getDownloadURL();
+        // Get the download URL of the uploaded image
+        final imageUrl = await storageRef.getDownloadURL();
+        // Upload the CV file to Firebase Storage
+        final cvName = DateTime.now().microsecondsSinceEpoch.toString();
+        final firebase_storage.Reference cvStorageRef =
+            firebase_storage.FirebaseStorage.instance.ref().child(cvName);
+        await cvStorageRef.putFile(_cv!);
 
-      // Store the data in Firestore
-      await FirebaseFirestore.instance.collection('test').add({
-        'name': name,
-        'phone': phone,
-        'profileImage': imageUrl,
-      });
+        // Get the download URL of the uploaded CV file
+        final cvUrl = await cvStorageRef.getDownloadURL();
+        // Store the data in Firestore
+        await FirebaseFirestore.instance.collection('test').add({
+          'name': name,
+          'familyName': familyName,
+          'email': email,
+          'phone': phone,
+          'city': city,
+          'specialty': specialty,
+          'profileImage': imageUrl,
+          'cvFileUrl': cvUrl, // Added line
+        });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data submitted successfully')),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Data submitted successfully')),
+        );
 
-      _nameController.clear();
-      _phoneController.clear();
-    } catch (e) {
-      print(e.toString()); // Print the error message to the console
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error submitting data')),
-      );
+        _nameController.clear();
+        _familyNameController.clear();
+        _emailController.clear();
+        _phoneController.clear();
+        _cityController.clear();
+        _specialtyController.clear();
+      } catch (e) {
+        print(e.toString()); // Print the error message to the console
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error submitting data')),
+        );
+      }
     }
   }
-}
 
-Future<void> _getImageFromGallery() async {
-  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  Future<void> _getImageFromGallery() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-  setState(() {
-    if (pickedFile != null) {
-      _image = File(pickedFile.path);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
+
+  Future<void> _getCvFromGallery() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc', 'docx'],
+    );
+
+    if (result != null) {
+      setState(() {
+        _cv = File(result.files.single.path!);
+      });
     }
-  });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +159,31 @@ Future<void> _getImageFromGallery() async {
                 },
               ),
               SizedBox(height: 20),
+
+              TextFormField(
+  controller: _familyNameController,
+  decoration: InputDecoration(
+    labelText: 'Family Name',
+  ),
+  validator: (value) {
+    if (value!.isEmpty) {
+      return 'Please enter your family name';
+    }
+    return null;
+  },
+),SizedBox(height: 20),
+TextFormField(
+  controller: _emailController,
+  decoration: InputDecoration(
+    labelText: 'Email',
+  ),
+  validator: (value) {
+    if (value!.isEmpty) {
+      return 'Please enter your email';
+    }
+    return null;
+  },
+),SizedBox(height: 20),
               TextFormField(
                 controller: _phoneController,
                 decoration: InputDecoration(
@@ -131,6 +195,47 @@ Future<void> _getImageFromGallery() async {
                   }
                   return null;
                 },
+              ),SizedBox(height: 20),
+TextFormField(
+  controller: _cityController,
+  decoration: InputDecoration(
+    labelText: 'City',
+  ),
+  validator: (value) {
+    if (value!.isEmpty) {
+      return 'Please enter your city';
+    }
+    return null;
+  },
+),SizedBox(height: 20),
+TextFormField(
+  controller: _specialtyController,
+  decoration: InputDecoration(
+    labelText: 'Specialty',
+  ),
+  validator: (value) {
+    if (value!.isEmpty) {
+      return 'Please enter your specialty';
+    }
+    return null;
+  },
+),
+
+              SizedBox(height: 20),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'CV',
+                ),
+                validator: (value) {
+                  if (_cv == null) {
+                    return 'Please select a CV file';
+                  }
+                  return null;
+                },
+              ),
+              ElevatedButton(
+                onPressed: _getCvFromGallery,
+                child: Text('Select CV'),
               ),
               SizedBox(height: 20),
               ElevatedButton(
