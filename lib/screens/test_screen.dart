@@ -18,7 +18,8 @@ class _TestScreenState extends State<TestScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  late File _image;
+  // late File _image;
+  File? _image; // Updated line
  
   final picker = ImagePicker();
 
@@ -32,7 +33,7 @@ class _TestScreenState extends State<TestScreen> {
         final imageName = DateTime.now().microsecondsSinceEpoch.toString();
         final firebase_storage.Reference storageRef =
             firebase_storage.FirebaseStorage.instance.ref().child(imageName);
-        await storageRef.putFile(_image);
+        await storageRef.putFile(_image!);
 
         // Get the download URL of the uploaded image
         final imageUrl = await storageRef.getDownloadURL();
@@ -91,7 +92,7 @@ Future<void> _getImageFromGallery() async {
                     color: Colors.grey,
                     image: _image != null
                         ? DecorationImage(
-                            image: FileImage(_image),
+                            image: FileImage(_image!),
                             fit: BoxFit.cover,
                           )
                         : null,
