@@ -52,10 +52,11 @@ class _TestScreenState extends State<TestScreen> {
         _nameController.clear();
         _phoneController.clear();
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error submitting data')),
-        );
-      }
+  print(e.toString()); // Print the error message to the console
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('Error submitting data')),
+  );
+}
     }
   }
 
