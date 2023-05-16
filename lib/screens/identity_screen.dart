@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jobfaster_application/screens/employer_screen.dart';
 // import 'package:jobfaster_application/screens/student_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:jobfaster_application/screens/test_screen.dart';
 
 class IdentityScreen extends StatefulWidget {
   static const String screenRoute = 'identity_screen';
@@ -69,7 +70,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
                 padding: const EdgeInsets.fromLTRB(10, 100, 10, 20),
                 child: TextButton(
                   onPressed: () {
-                    // Navigator.pushNamed(context, StudentScreen.screenRoute);
+                    Navigator.pushNamed(context, TestScreen.screenRoute);
                   },
                   child: Column(
                     children: [

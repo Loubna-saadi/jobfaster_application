@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'storage_service.dart';
 import 'firestore_service.dart';
 
