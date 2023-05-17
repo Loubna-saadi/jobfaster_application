@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
@@ -15,6 +17,7 @@ class EmployerScreen extends StatefulWidget {
 }
 
 class _EmployerScreenState extends State<EmployerScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   late File _image = File(''); // Initialize with an empty file
   late File _cv = File('');
   final StorageService _storageService = StorageService();
@@ -56,41 +59,60 @@ class _EmployerScreenState extends State<EmployerScreen> {
     }
   }
 
-  Future<void> _uploadData() async {
-    if (_image != null && _cv != null) {
-      final String imageName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
-      final String cvName = '${DateTime.now().microsecondsSinceEpoch}.pdf';
+Future<void> _uploadData() async {
+  if (_image != null && _cv != null) {
+    final String imageName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
+    final String cvName = '${DateTime.now().microsecondsSinceEpoch}.pdf';
 
-      final String imageFolderPath = 'images';
-      final String cvFolderPath = 'cv';
+    final String imageFolderPath = 'images';
+    final String cvFolderPath = 'cv';
 
-      final String imagePath = '$imageFolderPath/$imageName';
-      final String cvPath = '$cvFolderPath/$cvName';
+    final String imagePath = '$imageFolderPath/$imageName';
+    final String cvPath = '$cvFolderPath/$cvName';
 
-      final String? imageUrl = await _storageService.uploadFile(_image, imageFolderPath, imageName);
-      final String? cvUrl = await _storageService.uploadFile(_cv, cvFolderPath, cvName);
+    final String? imageUrl = await _storageService.uploadFile(_image, imageFolderPath, imageName);
+    final String? cvUrl = await _storageService.uploadFile(_cv, cvFolderPath, cvName);
 
-      if (imageUrl != null && cvUrl != null) {
+    if (imageUrl != null && cvUrl != null) {
+      final User? user = _auth.currentUser;
+      if (user != null) {
+        final String uid = user.uid;
         final String name = _nameController.text;
         final String familyName = _familyNameController.text;
         final String phone = _phoneController.text;
         final String email = _emailController.text;
 
-        _firestoreService.uploadUserData(name, familyName, phone, email, imageUrl, cvUrl);
+        final userRef = FirebaseFirestore.instance.collection('test').doc(user.uid);
+
+        await userRef.set({
+          'name': name,
+          'familyName': familyName,
+          'phone': phone,
+          'email': email,
+          'imageUrl': imageUrl,
+          'cvUrl': cvUrl,
+        });
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Data uploaded successfully')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error uploading data')),
+          SnackBar(content: Text('User not authenticated')),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an image and CV')),
+        SnackBar(content: Text('Error uploading data')),
       );
     }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please select an image and CV')),
+    );
   }
+}
+
 
 @override
 Widget build(BuildContext context) {

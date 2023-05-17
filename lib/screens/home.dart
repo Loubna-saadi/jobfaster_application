@@ -1,16 +1,13 @@
-// ignore_for_file: prefer_const_constructors
-
-// import 'package:flatemate/screens/flat_screen.dart';
-// import 'package:flatemate/screens/flatmate_screen.dart';
-// import 'package:flatemate/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:jobfaster_application/screens/welcome_screen.dart';
+
+import 'Profile_screen.dart';
 
 class Home extends StatefulWidget {
-  //const Home({super.key});
   static const String screenRoute = 'home_screen';
 
-  const Home({super.key});
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -20,6 +17,7 @@ class _HomeState extends State<Home> {
   final _auth = FirebaseAuth.instance;
 
   late User signedInUser;
+
   @override
   void initState() {
     super.initState();
@@ -50,7 +48,7 @@ class _HomeState extends State<Home> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Flatmate'),
+          title: Text('jobfaster'),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -67,19 +65,20 @@ class _HomeState extends State<Home> {
               child: Icon(Icons.account_circle),
             ),
             onTap: () {
-              print(signedInUser.email);
+              // Redirect to profile screen
+              Navigator.pushNamed(context, ProfileScreen.screenRoute);
             },
           ),
           toolbarHeight: 65,
-          backgroundColor: Color(0xFFF65A83), //Color(0xFFF44336)
+          backgroundColor: Color(0xFFF65A83),
           actions: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: IconButton(
                 onPressed: () {
-                  // _auth.signOut();
-                  // Navigator.pushReplacementNamed(
-                  //     context, WelcomeScreen.screenRoute);
+                  _auth.signOut();
+                  Navigator.pushReplacementNamed(
+                      context, WelcomeScreen.screenRoutes);
                 },
                 icon: Icon(Icons.logout),
               ),
@@ -90,19 +89,19 @@ class _HomeState extends State<Home> {
             tabs: const [
               Tab(
                 icon: Icon(Icons.apartment),
-                text: 'flats',
+                text: 'jobs',
               ),
               Tab(
                 icon: Icon(Icons.groups),
-                text: 'flatmates',
+                text: 'employers',
               ),
             ],
           ),
         ),
         body: TabBarView(
           children: const [
-            // FlatScreen(),
-            // FlatmateScreen(),
+            // jobsscreen(),
+            // employerslist(),
           ],
         ),
       ),

@@ -9,6 +9,7 @@ import 'package:jobfaster_application/screens/test_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:jobfaster_application/screens/profile_screen.dart';
 
 
 void main() async{
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         IdentityScreen.screenRoute: (context) => const IdentityScreen(),
         EmployerScreen.screenRoute: (context) => const EmployerScreen(),
         TestScreen.screenRoute: (context) => const TestScreen(),
+        ProfileScreen.screenRoute: (context) => const ProfileScreen(),
       },
     );
   }

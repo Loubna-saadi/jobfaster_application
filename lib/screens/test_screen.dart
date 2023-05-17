@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:file_picker/file_picker.dart';
+import 'package:jobfaster_application/screens/home.dart';
 
 class TestScreen extends StatefulWidget {
   static const String screenRoute = 'test_screen';
@@ -76,6 +77,7 @@ class _TestScreenState extends State<TestScreen> {
         _phoneController.clear();
         _cityController.clear();
         _specialtyController.clear();
+        Navigator.pushNamed(context, Home.screenRoute);
       } catch (e) {
         print(e.toString()); // Print the error message to the console
         ScaffoldMessenger.of(context).showSnackBar(
@@ -114,135 +116,137 @@ class _TestScreenState extends State<TestScreen> {
       appBar: AppBar(
         title: Text('Test Page'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: _getImageFromGallery,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey,
-                    image: _image != null
-                        ? DecorationImage(
-                            image: FileImage(_image!),
-                            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: _getImageFromGallery,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                      image: _image != null
+                          ? DecorationImage(
+                              image: FileImage(_image!),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
+                    ),
+                    child: _image == null
+                        ? Icon(
+                            Icons.add_a_photo,
+                            color: Colors.white,
+                            size: 40,
                           )
                         : null,
                   ),
-                  child: _image == null
-                      ? Icon(
-                          Icons.add_a_photo,
-                          color: Colors.white,
-                          size: 40,
-                        )
-                      : null,
                 ),
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a name';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-
-              TextFormField(
-  controller: _familyNameController,
-  decoration: InputDecoration(
-    labelText: 'FamilyName',
-  ),
-  validator: (value) {
-    if (value!.isEmpty) {
-      return 'Please enter your family name';
-    }
-    return null;
-  },
-),SizedBox(height: 20),
-TextFormField(
-  controller: _emailController,
-  decoration: InputDecoration(
-    labelText: 'Email',
-  ),
-  validator: (value) {
-    if (value!.isEmpty) {
-      return 'Please enter your email';
-    }
-    return null;
-  },
-),SizedBox(height: 20),
-              TextFormField(
-                controller: _phoneController,
-                decoration: InputDecoration(
-                  labelText: 'Phone',
+                SizedBox(height: 20),
+      
+                TextFormField(
+        controller: _familyNameController,
+        decoration: InputDecoration(
+          labelText: 'FamilyName',
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+        return 'Please enter your family name';
+          }
+          return null;
+        },
+      ),SizedBox(height: 20),
+      TextFormField(
+        controller: _emailController,
+        decoration: InputDecoration(
+          labelText: 'Email',
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+        return 'Please enter your email';
+          }
+          return null;
+        },
+      ),SizedBox(height: 20),
+                TextFormField(
+                  controller: _phoneController,
+                  decoration: InputDecoration(
+                    labelText: 'Phone',
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a phone number';
+                    }
+                    return null;
+                  },
+                ),SizedBox(height: 20),
+      TextFormField(
+        controller: _cityController,
+        decoration: InputDecoration(
+          labelText: 'City',
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+        return 'Please enter your city';
+          }
+          return null;
+        },
+      ),SizedBox(height: 20),
+      TextFormField(
+        controller: _specialtyController,
+        decoration: InputDecoration(
+          labelText: 'Specialty',
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+        return 'Please enter your specialty';
+          }
+          return null;
+        },
+      ),
+      
+                SizedBox(height: 20),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'CV',
+                  ),
+                  validator: (value) {
+                    if (_cv == null) {
+                      return 'Please select a CV file';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a phone number';
-                  }
-                  return null;
-                },
-              ),SizedBox(height: 20),
-TextFormField(
-  controller: _cityController,
-  decoration: InputDecoration(
-    labelText: 'City',
-  ),
-  validator: (value) {
-    if (value!.isEmpty) {
-      return 'Please enter your city';
-    }
-    return null;
-  },
-),SizedBox(height: 20),
-TextFormField(
-  controller: _specialtyController,
-  decoration: InputDecoration(
-    labelText: 'Specialty',
-  ),
-  validator: (value) {
-    if (value!.isEmpty) {
-      return 'Please enter your specialty';
-    }
-    return null;
-  },
-),
-
-              SizedBox(height: 20),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'CV',
+                ElevatedButton(
+                  onPressed: _getCvFromGallery,
+                  child: Text('Select CV'),
                 ),
-                validator: (value) {
-                  if (_cv == null) {
-                    return 'Please select a CV file';
-                  }
-                  return null;
-                },
-              ),
-              ElevatedButton(
-                onPressed: _getCvFromGallery,
-                child: Text('Select CV'),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Submit'),
-              ),
-            ],
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _submitForm,
+                  child: Text('Submit'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
