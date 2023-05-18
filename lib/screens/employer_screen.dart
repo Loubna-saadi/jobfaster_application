@@ -59,117 +59,121 @@ class _EmployerScreenState extends State<EmployerScreen> {
     }
   }
 
-Future<void> _uploadData() async {
-  if (_image != null && _cv != null) {
-    final String imageName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
-    final String cvName = '${DateTime.now().microsecondsSinceEpoch}.pdf';
+  Future<void> _uploadData() async {
+    if (_image != null && _cv != null) {
+      final String imageName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
+      final String cvName = '${DateTime.now().microsecondsSinceEpoch}.pdf';
 
-    final String imageFolderPath = 'images';
-    final String cvFolderPath = 'cv';
+      final String imageFolderPath = 'images';
+      final String cvFolderPath = 'cv';
 
-    final String imagePath = '$imageFolderPath/$imageName';
-    final String cvPath = '$cvFolderPath/$cvName';
+      final String imagePath = '$imageFolderPath/$imageName';
+      final String cvPath = '$cvFolderPath/$cvName';
 
-    final String? imageUrl = await _storageService.uploadFile(_image, imageFolderPath, imageName);
-    final String? cvUrl = await _storageService.uploadFile(_cv, cvFolderPath, cvName);
+      final String? imageUrl =
+          await _storageService.uploadFile(_image, imageFolderPath, imageName);
+      final String? cvUrl =
+          await _storageService.uploadFile(_cv, cvFolderPath, cvName);
 
-    if (imageUrl != null && cvUrl != null) {
-      final User? user = _auth.currentUser;
-      if (user != null) {
-        final String uid = user.uid;
-        final String name = _nameController.text;
-        final String familyName = _familyNameController.text;
-        final String phone = _phoneController.text;
-        final String email = _emailController.text;
+      if (imageUrl != null && cvUrl != null) {
+        final User? user = _auth.currentUser;
+        if (user != null) {
+          final String uid = user.uid;
+          final String name = _nameController.text;
+          final String familyName = _familyNameController.text;
+          final String phone = _phoneController.text;
+          final String email = _emailController.text;
+          // print(uid);
+          final userRef =
+              FirebaseFirestore.instance.collection('test').doc(uid);
 
-        final userRef = FirebaseFirestore.instance.collection('test').doc(user.uid);
+          await userRef.set({
+            'name': name,
+            'familyName': familyName,
+            'phone': phone,
+            'email': email,
+            'imageUrl': imageUrl,
+            'cvUrl': cvUrl,
+          });
 
-        await userRef.set({
-          'name': name,
-          'familyName': familyName,
-          'phone': phone,
-          'email': email,
-          'imageUrl': imageUrl,
-          'cvUrl': cvUrl,
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Data uploaded successfully')),
-        );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Data uploaded successfully')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('User not authenticated')),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User not authenticated')),
+          SnackBar(content: Text('Error uploading data')),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error uploading data')),
+        SnackBar(content: Text('Please select an image and CV')),
       );
     }
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please select an image and CV')),
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Upload Page'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: 'Name',
+            ),
+          ),
+          TextField(
+            controller: _familyNameController,
+            decoration: InputDecoration(
+              labelText: 'Family Name',
+            ),
+          ),
+          TextField(
+            controller: _phoneController,
+            decoration: InputDecoration(
+              labelText: 'Phone',
+            ),
+          ),
+          TextField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              labelText: 'Email',
+            ),
+          ),
+          SizedBox(height: 20),
+          // Center(
+          //   child: _image == null ? Text('No image selected') : Image.file(_image),
+          // ),
+          ElevatedButton(
+            onPressed: () => _pickImage(ImageSource.gallery),
+            child: Text('Select Image'),
+          ),
+          SizedBox(height: 20),
+          Center(
+            child: _cv == null
+                ? Text('No CV selected')
+                : Text(path.basename(_cv.path)),
+          ),
+          ElevatedButton(
+            onPressed: _pickCV,
+            child: Text('Select CV'),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _uploadData,
+            child: Text('Upload Data'),
+          ),
+        ],
+      ),
     );
   }
 }
-
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text('Upload Page'),
-    ),
-    body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextField(
-          controller: _nameController,
-          decoration: InputDecoration(
-            labelText: 'Name',
-          ),
-        ),
-        TextField(
-          controller: _familyNameController,
-          decoration: InputDecoration(
-            labelText: 'Family Name',
-          ),
-        ),
-        TextField(
-          controller: _phoneController,
-          decoration: InputDecoration(
-            labelText: 'Phone',
-          ),
-        ),
-        TextField(
-          controller: _emailController,
-          decoration: InputDecoration(
-            labelText: 'Email',
-          ),
-        ),
-        SizedBox(height: 20),
-        // Center(
-        //   child: _image == null ? Text('No image selected') : Image.file(_image),
-        // ),
-        ElevatedButton(
-          onPressed: () => _pickImage(ImageSource.gallery),
-          child: Text('Select Image'),
-        ),
-        SizedBox(height: 20),
-        Center(
-          child: _cv == null ? Text('No CV selected') : Text(path.basename(_cv.path)),
-        ),
-        ElevatedButton(
-          onPressed: _pickCV,
-          child: Text('Select CV'),
-        ),
-        SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _uploadData,
-          child: Text('Upload Data'),
-        ),
-      ],
-    ),
-  );
-}}
-

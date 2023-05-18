@@ -32,19 +32,14 @@ void getCurrentUser() async {
     final userRef = FirebaseFirestore.instance.collection('test').doc(user.uid);
     final snapshot = await userRef.get();
     if (snapshot.exists) {
-      print('Type of snapshot.data(): ${snapshot.data().runtimeType}');
+      print('Snapshot data: ${snapshot.data()}');
       setState(() {
-        userData = snapshot.data() as Map<String, dynamic>;
+        userData = snapshot.data() ?? {};
       });
     }
-    
-    // Print the user's information
-    print('Name: ${userData['name']}');
-    print('Email: ${userData['email']}');
-    print('City: ${userData['city']}');
-    print('Specialty: ${userData['speciality']}');
   }
 }
+
 
   @override
   Widget build(BuildContext context) {
