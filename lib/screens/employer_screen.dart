@@ -84,16 +84,15 @@ class _EmployerScreenState extends State<EmployerScreen> {
           final String phone = _phoneController.text;
           final String email = _emailController.text;
           // print(uid);
-          final userRef =FirebaseFirestore.instance.collection('test').doc(user.uid);
-
-          await userRef.set({
-            'name': name,
-            'familyName': familyName,
-            'phone': phone,
-            'email': email,
-            'imageUrl': imageUrl,
-            'cvUrl': cvUrl,
-          });
+          final userRef =FirebaseFirestore.instance.collection('test');
+      await userRef.doc(user.uid).set({
+  'name': name,
+  'familyName': familyName,
+  'phone': phone,
+  'email': email,
+  'imageUrl': imageUrl,
+  'cvUrl': cvUrl,
+});
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Data uploaded successfully')),
