@@ -75,38 +75,38 @@ class _EmployerScreenState extends State<EmployerScreen> {
       final String? cvUrl =
           await _storageService.uploadFile(_cv, cvFolderPath, cvName);
 
- final CollectionReference testCollection = FirebaseFirestore.instance.collection('test');
-final String uid = _auth.currentUser?.uid ?? '';
-final String name = _nameController.text;
-final String familyName = _familyNameController.text;
-final String phone = _phoneController.text;
-final String email = _emailController.text;
-final Map<String, dynamic> userData = {
-  'name': name,
-  'familyName': familyName,
-  'phone': phone,
-  'email': email,
-  'imageUrl': imageUrl,
-  'cvUrl': cvUrl,
-};
+     
+        final CollectionReference testCollection =
+            FirebaseFirestore.instance.collection('test');
+        final String uid = _auth.currentUser?.uid ?? '';
+        final String name = _nameController.text;
+        final String familyName = _familyNameController.text;
+        final String phone = _phoneController.text;
+        final String email = _emailController.text;
+        final Map<String, dynamic> userData = {
+          'name': name,
+          'familyName': familyName,
+          'phone': phone,
+          'email': email,
+          'imageUrl': imageUrl,
+          'cvUrl': cvUrl,
+        };
 
-try {
-  if (imageUrl != null && cvUrl != null) {
-    await testCollection.doc(uid).set(userData);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Data uploaded successfully')),
-    );
-  }
-} catch (e) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('An error occurred: $e')),
-  );
-}
-
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an image and CV')),
-      );
+        try {
+          if (imageUrl != null && cvUrl != null) {
+            await testCollection
+                .doc(uid)
+                .set(userData, SetOptions(merge: true));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Data uploaded successfully')),
+            );
+          }
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('An error occurred: $e')),
+          );
+        
+      }
     }
   }
 
