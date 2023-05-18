@@ -75,40 +75,34 @@ class _EmployerScreenState extends State<EmployerScreen> {
       final String? cvUrl =
           await _storageService.uploadFile(_cv, cvFolderPath, cvName);
 
-      if (imageUrl != null && cvUrl != null) {
-        final User? user = _auth.currentUser;
-        if (user != null) {
-          final String uid = user.uid;
-          final String name = _nameController.text;
-          final String familyName = _familyNameController.text;
-          final String phone = _phoneController.text;
-          final String email = _emailController.text;
-          // print(uid);
-          final userRef =
-              FirebaseFirestore.instance.collection('test').doc(uid);
+ final CollectionReference testCollection = FirebaseFirestore.instance.collection('test');
+final String uid = _auth.currentUser?.uid ?? '';
+final String name = _nameController.text;
+final String familyName = _familyNameController.text;
+final String phone = _phoneController.text;
+final String email = _emailController.text;
+final Map<String, dynamic> userData = {
+  'name': name,
+  'familyName': familyName,
+  'phone': phone,
+  'email': email,
+  'imageUrl': imageUrl,
+  'cvUrl': cvUrl,
+};
 
-          await userRef.set({
-            'name': name,
-            'familyName': familyName,
-            'phone': phone,
-            'email': email,
-            'imageUrl': imageUrl,
-            'cvUrl': cvUrl,
-          });
+try {
+  if (imageUrl != null && cvUrl != null) {
+    await testCollection.doc(uid).set(userData);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Data uploaded successfully')),
+    );
+  }
+} catch (e) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('An error occurred: $e')),
+  );
+}
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Data uploaded successfully')),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('User not authenticated')),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error uploading data')),
-        );
-      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please select an image and CV')),
