@@ -24,10 +24,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
+    fetchUserData();
   }
 
-  void getCurrentUser() async {
+  void fetchUserData() async {
     final user = _auth.currentUser;
     if (user != null) {
       setState(() {
@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }, SetOptions(merge: true));
 
         setState(() {
-          userData = userRef.get() as Map<String, dynamic>;
+          fetchUserData();
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
