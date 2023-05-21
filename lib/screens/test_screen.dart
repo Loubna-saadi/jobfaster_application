@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,16 +57,26 @@ class _TestScreenState extends State<TestScreen> {
         // Get the download URL of the uploaded CV file
         final cvUrl = await cvStorageRef.getDownloadURL();
         // Store the data in Firestore
-        await FirebaseFirestore.instance.collection('test').add({
-          'name': name,
-          'familyName': familyName,
-          'email': email,
-          'phone': phone,
-          'city': city,
-          'specialty': specialty,
-          'profileImage': imageUrl,
-          'cvFileUrl': cvUrl, // Added line
-        });
+  User? user = FirebaseAuth.instance.currentUser;
+if (user != null) {
+  String uid = user.uid;
+
+  await FirebaseFirestore.instance.collection('test').doc(uid).set({
+    'name': name,
+    'familyName': familyName,
+    'email': email,
+    'phone': phone,
+    'city': city,
+    'specialty': specialty,
+    'profileImage': imageUrl,
+    'cvFileUrl': cvUrl,
+  });
+} else {
+  // Handle the case where the user is not logged in or the user object is null
+  print('User is not logged in.');
+}
+
+
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Data submitted successfully')),

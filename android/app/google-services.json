@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "344159010410",
-    "project_id": "jobfaster-9cce3",
-    "storage_bucket": "jobfaster-9cce3.appspot.com"
+    "project_number": "605290327044",
+    "project_id": "jobfaster-9b6b8",
+    "storage_bucket": "jobfaster-9b6b8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:344159010410:android:d53662fa712b3ac9c99413",
+        "mobilesdk_app_id": "1:605290327044:android:2c3e4dbeff99f660a45951",
         "android_client_info": {
           "package_name": "com.loubna.jobfaster_application"
         }
       },
       "oauth_client": [
         {
-          "client_id": "344159010410-nlvkvf1u5de2ioracihvoci0ijgo8pgk.apps.googleusercontent.com",
+          "client_id": "605290327044-ehh834ptru3du6v7hvlrglco3jmccofg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyASQomJRmuLMtfbEgMeljRZWltyLadBTMM"
+          "current_key": "AIzaSyBkLcLtqq0zMV_wkUU1meOdIWufxNEKJrc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "344159010410-nlvkvf1u5de2ioracihvoci0ijgo8pgk.apps.googleusercontent.com",
+              "client_id": "605290327044-ehh834ptru3du6v7hvlrglco3jmccofg.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

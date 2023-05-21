@@ -22,24 +22,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getCurrentUser();
   }
 
-void getCurrentUser() async {
-  final user = _auth.currentUser;
-  if (user != null) {
-    setState(() {
-      currentUser = user;
-    });
-
-    final userRef = FirebaseFirestore.instance.collection('test').doc(user.uid);
-    final snapshot = await userRef.get();
-    if (snapshot.exists) {
-      print('Snapshot data: ${snapshot.data()}');
+  void getCurrentUser() async {
+    final user = _auth.currentUser;
+    if (user != null) {
       setState(() {
-        userData = snapshot.data() ?? {};
+        currentUser = user;
       });
+
+      final userRef = FirebaseFirestore.instance.collection('test').doc(user.uid);
+      final snapshot = await userRef.get();
+      if (snapshot.exists) {
+        print('Snapshot data: ${snapshot.data()}');
+        setState(() {
+          userData = snapshot.data() ?? {};
+        });
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +51,16 @@ void getCurrentUser() async {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  userData['profileImage'] != null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(userData['profileImage']),
+                          radius: 50,
+                        )
+                      : Container(), // Display an empty container if profileImage is not available
                   Text('Name: ${userData['name']}'),
                   Text('Email: ${userData['email']}'),
                   Text('City: ${userData['city']}'),
-                  Text('Specialty: ${userData['speciality']}'),
+                  Text('Specialty: ${userData['specialty']}'),
                 ],
               ),
             )
@@ -63,6 +68,14 @@ void getCurrentUser() async {
     );
   }
 }
+
+
+
+
+
+
+
+
 
 
 
