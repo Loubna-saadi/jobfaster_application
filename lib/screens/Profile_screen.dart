@@ -44,11 +44,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 139, 124, 247),
+                Color(0xFF1BAFAF),
+              ],
+            ),
+          ),
+        ),
         title: Text(
           'Profile',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
@@ -58,31 +69,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  userData['profileImage'] != null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(userData['profileImage']),
-                          radius: 50,
-                        )
-                      : Container(), // Display an empty container if profileImage is not available
-                  SizedBox(height: 16),
-                  Text(
-                    'Name: ${userData['name']}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(userData['profileImage'] ?? ''),
+                        fit: BoxFit.cover,
+                      ),
+                      border: Border.all(
+                        color: Colors.blue,
+                        width: 4,
+                      ),
                     ),
                   ),
+                  SizedBox(height: 16),
                   Text(
-                    'Email: ${userData['email']}',
-                    style: TextStyle(fontSize: 16),
+                    'Name: ${userData['name'] ?? ''}',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
+                  SizedBox(height: 8),
                   Text(
-                    'City: ${userData['city']}',
-                    style: TextStyle(fontSize: 16),
+                    'Email: ${userData['email'] ?? ''}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[700],
+                    ),
                   ),
+                  SizedBox(height: 8),
                   Text(
-                    'Specialty: ${userData['specialty']}',
-                    style: TextStyle(fontSize: 16),
+                    'City: ${userData['city'] ?? ''}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Specialty: ${userData['specialty'] ?? ''}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[700],
+                    ),
                   ),
                 ],
               ),
@@ -93,6 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
 
 
 
