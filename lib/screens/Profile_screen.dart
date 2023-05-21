@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
   static const String screenRoute = 'profile_screen';
@@ -74,6 +77,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _updateProfilePicture() async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      String profileImageUrl = await uploadProfileImageToStorage(file);
+      
+      final User? user = _auth.currentUser;
+      if (user != null) {
+        final userRef =
+            FirebaseFirestore.instance.collection('test').doc(user.uid);
+        await userRef.set({
+          'profileImage': profileImageUrl,
+        }, SetOptions(merge: true));
+
+        setState(() {
+          fetchUserData();
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Profile picture updated successfully')),
+        );
+      }
+    }
+  }
+
+  Future<String> uploadProfileImageToStorage(File file) async {
+    try {
+      final User? user = _auth.currentUser;
+      if (user != null) {
+        final storageRef = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('profile_images')
+            .child('${user.uid}.jpg');
+
+        final uploadTask = storageRef.putFile(file);
+        await uploadTask.whenComplete(() => null);
+
+        final profileImageUrl = await storageRef.getDownloadURL();
+        return profileImageUrl;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating profile picture')),
+      );
+    }
+
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,65 +136,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (userData.isNotEmpty) ...[
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(userData['profileImage'] ?? ''),
-                            fit: BoxFit.cover,
-                          ),
-                          border: Border.all(
-                            color: Colors.blue,
-                            width: 4,
-                          ),
+              Container(
+                margin: EdgeInsets.only(bottom: 16),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(userData['profileImage'] ?? ''),
+                          fit: BoxFit.cover,
+                        ),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 4,
                         ),
                       ),
-                      SizedBox(height: 16),
-                      Text(
-                        'Name: ${userData['name'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Name: ${userData['name'] ?? ''}',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Email: ${userData['email'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Email: ${userData['email'] ?? ''}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[700],
                       ),
-                      SizedBox(height: 8),
-                      Text(
-                        'City: ${userData['city'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'City: ${userData['city'] ?? ''}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[700],
                       ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Specialty: ${userData['specialty'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Specialty: ${userData['specialty'] ?? ''}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[700],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -165,6 +214,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ElevatedButton(
               onPressed: _updateProfile,
               child: Text('Update Profile'),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _updateProfilePicture,
+              child: Text('Update Profile Picture'),
             ),
           ],
         ),
