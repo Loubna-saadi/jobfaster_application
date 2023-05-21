@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,7 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _specialityController = TextEditingController();
 
   late User? currentUser;
-  late Map<String, dynamic> userData;
+  late Map<String, dynamic> userData = {}; // Initialize as an empty map
 
   @override
   void initState() {
@@ -167,7 +166,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
 
 
 
