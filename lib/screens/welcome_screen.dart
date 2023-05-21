@@ -37,12 +37,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ],
                     ).createShader(bounds);
                   },
-                  child: const Text(
-                    'jobfaster',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white, // Set the initial color to white
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text(
+                      'jobfaster',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white, // Set the initial color to white
+                      ),
                     ),
                   ),
                 ),

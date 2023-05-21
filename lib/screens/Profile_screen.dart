@@ -65,59 +65,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
       ),
       body: currentUser != null
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(userData['profileImage'] ?? ''),
-                        fit: BoxFit.cover,
+          ? Container(
+              margin: EdgeInsets.only(top: 0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(userData['profileImage'] ?? ''),
+                          fit: BoxFit.cover,
+                        ),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 4,
+                        ),
                       ),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 4,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Name: ${userData['name'] ?? ''}',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Name: ${userData['name'] ?? ''}',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                    SizedBox(height: 8),
+                    Text(
+                      'Email: ${userData['email'] ?? ''}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[700],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Email: ${userData['email'] ?? ''}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[700],
+                    SizedBox(height: 8),
+                    Text(
+                      'City: ${userData['city'] ?? ''}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[700],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'City: ${userData['city'] ?? ''}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[700],
+                    SizedBox(height: 8),
+                    Text(
+                      'Specialty: ${userData['specialty'] ?? ''}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[700],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Specialty: ${userData['specialty'] ?? ''}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           : Center(
@@ -126,6 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
 
 
 
