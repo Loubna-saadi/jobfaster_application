@@ -19,7 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _specialityController = TextEditingController();
 
   late User? currentUser;
-  late Map<String, dynamic> userData = {};
+  Map<String, dynamic> userData = {};
 
   @override
   void initState() {
@@ -36,13 +36,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       final userRef = FirebaseFirestore.instance.collection('test').doc(user.uid);
       final DocumentSnapshot<Map<String, dynamic>> snapshot = await userRef.get();
-      userData = snapshot.data()!;
-
       setState(() {
-        _nameController.text = userData['name'];
-        _emailController.text = userData['email'];
-        _cityController.text = userData['city'];
-        _specialityController.text = userData['speciality'];
+        userData = snapshot.data() ?? {};
+        _nameController.text = userData['name'] ?? '';
+        _emailController.text = userData['email'] ?? '';
+        _cityController.text = userData['city'] ?? '';
+        _specialityController.text = userData['speciality'] ?? '';
       });
     }
   }
@@ -86,64 +85,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: NetworkImage(userData['profileImage'] ?? ''),
-                          fit: BoxFit.cover,
+            if (userData.isNotEmpty) ...[
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(userData['profileImage'] ?? ''),
+                            fit: BoxFit.cover,
+                          ),
+                          border: Border.all(
+                            color: Colors.blue,
+                            width: 4,
+                          ),
                         ),
-                        border: Border.all(
-                          color: Colors.blue,
-                          width: 4,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Name: ${userData['name'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Name: ${userData['name'] ?? ''}',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                      SizedBox(height: 8),
+                      Text(
+                        'Email: ${userData['email'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[700],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Email: ${userData['email'] ?? ''}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[700],
+                      SizedBox(height: 8),
+                      Text(
+                        'City: ${userData['city'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[700],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'City: ${userData['city'] ?? ''}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[700],
+                      SizedBox(height: 8),
+                      Text(
+                        'Specialty: ${userData['specialty'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[700],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Specialty: ${userData['specialty'] ?? ''}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+            ],
             SizedBox(height: 24),
             TextField(
               controller: _nameController,
@@ -171,7 +172,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
 
 
 
