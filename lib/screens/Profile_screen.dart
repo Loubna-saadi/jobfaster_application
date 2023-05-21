@@ -44,7 +44,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text(
+          'Profile',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: currentUser != null
           ? Center(
@@ -57,17 +64,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           radius: 50,
                         )
                       : Container(), // Display an empty container if profileImage is not available
-                  Text('Name: ${userData['name']}'),
-                  Text('Email: ${userData['email']}'),
-                  Text('City: ${userData['city']}'),
-                  Text('Specialty: ${userData['specialty']}'),
+                  SizedBox(height: 16),
+                  Text(
+                    'Name: ${userData['name']}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Email: ${userData['email']}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    'City: ${userData['city']}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    'Specialty: ${userData['specialty']}',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ],
               ),
             )
-          : CircularProgressIndicator(),
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }
+
 
 
 
