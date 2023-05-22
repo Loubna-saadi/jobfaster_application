@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jobfaster_application/screens/test_screen.dart';
 import '../widgets/my_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'companyinfo_screen.dart';
 import 'identity_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String screenRoutes = 'registration_screen';
@@ -15,28 +18,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   late String email;
   late String password;
-  // bool showSpinner = false;
-  //auth private variable to create an authentification of a new user
+  String selectedRole = 'employee'; // Default role is employee
   final _auth = FirebaseAuth.instance;
-
-  late User signedInUser;
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        signedInUser = user;
-        print(signedInUser.email);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -47,31 +31,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-           Expanded(
-  flex: 3,
-  child: ShaderMask(
-    shaderCallback: (bounds) {
-      return const LinearGradient(
-        colors: [
-          Color.fromARGB(255, 139, 124, 247),
-          Color(0xFFC4F6F6),
-        ],
-      ).createShader(bounds);
-    },
-    child: const Center(
-      child: Text(
-        'jobfaster',
-        style: TextStyle(
-          fontSize: 70,
-          fontWeight: FontWeight.w900,
-          color: Colors.white, // Set the initial color to white
-        ),
-      ),
-    ),
-  ),
-),
-
-            //SizedBox(height: 50),
+            Expanded(
+              flex: 3,
+              child: ShaderMask(
+                shaderCallback: (bounds) {
+                  return const LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 139, 124, 247),
+                      Color(0xFFC4F6F6),
+                    ],
+                  ).createShader(bounds);
+                },
+                child: const Center(
+                  child: Text(
+                    'jobfaster',
+                    style: TextStyle(
+                      fontSize: 70,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white, // Set the initial color to white
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               flex: 2,
               child: Form(
@@ -185,41 +167,88 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: RadioListTile(
+                            title: const Text('Employee'),
+                            value: 'employee',
+                            groupValue: selectedRole,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedRole = value.toString();
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: RadioListTile(
+                            title: const Text('Company'),
+                            value: 'company',
+                            groupValue: selectedRole,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedRole = value.toString();
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                     Container(
                       height: 50,
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
-               colors: [Color.fromARGB(255, 139, 124, 247), Color(0xFF1BAFAF)],
+                          colors: [
+                            Color.fromARGB(255, 139, 124, 247),
+                            Color(0xFF1BAFAF)
+                          ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
                       child: MyButton(
-                         gradient: const LinearGradient(
-                colors: [Color.fromARGB(255, 139, 124, 247), Color(0xFF1BAFAF)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              title: 'Register',
-              onPressed: () async {
-                          // setState(() {
-                          //   showSpinner = true;
-                          // });
-if (_formKey.currentState?.validate() ?? false) {
-  _formKey.currentState!.save();
-  await _auth.createUserWithEmailAndPassword(
-    email: email,
-    password: password,
-  );
-  Navigator.pushNamed(context, IdentityScreen.screenRoute);
-}
-                          try {
-                            // setState(() {
-                            //   showSpinner = false;
-                            // });
-                          } catch (e) {
-                            print(e);
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 139, 124, 247),
+                            Color(0xFF1BAFAF)
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        title: 'Register',
+                        onPressed: () async {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            _formKey.currentState!.save();
+                            try {
+                              final newUser =
+                                  await _auth.createUserWithEmailAndPassword(
+                                email: email,
+                                password: password,
+                              );
+
+                              // Set the role field in the user collection
+                              await _firestore
+                                  .collection('users')
+                                  .doc(newUser.user!.uid)
+                                  .set({
+                                'role': selectedRole,
+                              });
+  // Redirect the user to the appropriate screen
+                              if (selectedRole == 'employee') {
+                                Navigator.pushNamed(context, TestScreen.screenRoute);
+                              } else if (selectedRole == 'company') {
+                                Navigator.pushNamed(context, CompanyInfoScreen.screenRoute);
+                              }
+                              // Navigator.pushNamed(
+                              //     context, IdentityScreen.screenRoute);
+                            } catch (e) {
+                              print(e);
+                            }
                           }
                         },
                       ),
@@ -234,4 +263,3 @@ if (_formKey.currentState?.validate() ?? false) {
     );
   }
 }
-
