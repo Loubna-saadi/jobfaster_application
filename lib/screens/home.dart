@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: const [Color(0xFFF65A83), Color(0xFF293462)],
+                colors: [Color.fromARGB(255, 139, 124, 247), Color(0xFF1BAFAF)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
               ),
               Tab(
                 icon: Icon(Icons.groups),
-                text: 'employers',
+                text: 'employees',
               ),
             ],
           ),
