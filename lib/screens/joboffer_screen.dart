@@ -66,6 +66,9 @@ class _JobOfferScreenState extends State<JobOfferScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final currentCompanyId = currentUser?.uid;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Job Offer'),
@@ -102,7 +105,10 @@ class _JobOfferScreenState extends State<JobOfferScreen> {
             SizedBox(height: 16),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('jobs').snapshots(),
+                stream: FirebaseFirestore.instance
+                    .collection('jobs')
+                    .where('companyId', isEqualTo: currentCompanyId)
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
