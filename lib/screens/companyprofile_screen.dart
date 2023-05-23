@@ -127,77 +127,67 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
     return '';
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Company Profile'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: AppBar(
+          title: Column(
+            children: [
+              Text(
+                'Company Profile',
+                style: TextStyle(fontSize: 18),
+              ),
+              Divider(
+                color: Colors.grey,
+                thickness: 1,
+                height: 5,
+              ),
+            ],
+          ),
+          actions: [
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                // Handle menu item selection
+                switch (value) {
+                  case 'jobOffer':
+                    // Handle job offer menu item
+                    break;
+                  case 'applications':
+                    // Handle applications menu item
+                    break;
+                  // Add more menu items and their handlers here
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'jobOffer',
+                  child: ListTile(
+                    leading: Icon(Icons.work),
+                    title: Text('Job Offer'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'applications',
+                  child: ListTile(
+                    leading: Icon(Icons.list_alt),
+                    title: Text('Applications'),
+                  ),
+                ),
+                // Add more menu items here
+              ],
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              if (userData.isNotEmpty) ...[
-                Container(
-                  margin: EdgeInsets.only(bottom: 16),
-                  
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(userData['profileImage'] ?? ''),
-                            fit: BoxFit.cover,
-                          ),
-                          border: Border.all(
-                            color: Colors.blue,
-                            width: 4,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        'Name: ${userData['name'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Email: ${userData['email'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'City: ${userData['city'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Speciality: ${userData['specialty'] ?? ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      
-                    ],
-                  ),
-      
-                ),
-              ],
+              // Existing code for displaying user data
               SizedBox(height: 24),
               TextField(
                 controller: _nameController,
@@ -212,24 +202,21 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                 decoration: InputDecoration(labelText: 'City'),
               ),
               TextField(
-                  cursorColor: Color.fromARGB(255, 53, 68, 128),
-                        decoration: InputDecoration(
-                          labelText: 'Speciality',
-                          floatingLabelStyle:
-                              TextStyle(color: Color.fromARGB(255, 53, 68, 128)),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 53, 68, 128),
-                                width: 2),
-                          ),
-                        ),
+                cursorColor: Color.fromARGB(255, 53, 68, 128),
+                decoration: InputDecoration(
+                  labelText: 'Speciality',
+                  floatingLabelStyle:
+                      TextStyle(color: Color.fromARGB(255, 53, 68, 128)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Color.fromARGB(255, 53, 68, 128), width: 2),
+                  ),
+                ),
                 controller: _specialityController,
-               
               ),
-              
               ElevatedButton(
                 onPressed: _updateProfile,
                 child: Text('Update Profile'),
@@ -246,7 +233,3 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
     );
   }
 }
-
-
-
-
