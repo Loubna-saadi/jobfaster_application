@@ -20,7 +20,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
   final _emailController = TextEditingController();
   final _cityController = TextEditingController();
   final _specialityController = TextEditingController();
-
+ GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late User? currentUser;
   Map<String, dynamic> userData = {};
 
@@ -129,9 +129,10 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
     return '';
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Company Profile'),
         leading: InkWell(
@@ -161,7 +162,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
             ),
           ),
           onTap: () {
-            Scaffold.of(context).openDrawer();
+            _scaffoldKey.currentState?.openDrawer();
           },
         ),
       ),
