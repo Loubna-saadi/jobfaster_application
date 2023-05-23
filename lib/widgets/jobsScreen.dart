@@ -33,7 +33,8 @@ class JobsScreen extends StatelessWidget {
                   .doc(jobOffer['companyId'])
                   .get(),
               builder: (context, companySnapshot) {
-                if (companySnapshot.connectionState == ConnectionState.waiting) {
+                if (companySnapshot.connectionState ==
+                    ConnectionState.waiting) {
                   return SizedBox.shrink();
                 }
 
@@ -41,8 +42,10 @@ class JobsScreen extends StatelessWidget {
                   return SizedBox.shrink();
                 }
 
-                final companyData = companySnapshot.data?.data() as Map<String, dynamic>?;
-                final companyLogo = companyData?['profileImage'] as String? ?? '';
+                final companyData =
+                    companySnapshot.data?.data() as Map<String, dynamic>?;
+                final companyLogo =
+                    companyData?['profileImage'] as String? ?? '';
 
                 final title = jobOffer['jobTitle'] as String? ?? '';
                 final city = jobOffer['city'] as String? ?? '';

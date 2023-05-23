@@ -52,12 +52,16 @@ class MyApp extends StatelessWidget {
             const CompanyProfileScreen(),
         JobOfferScreen.screenRoute: (context) => const JobOfferScreen(),
         ApplyScreen.screenRoute: (context) {
-          final jobOffer = ModalRoute.of(context)!.settings.arguments
-              as Map<String, dynamic>;
+          final Map<String, dynamic> args = ModalRoute.of(context)!
+              .settings
+              .arguments as Map<String, dynamic>;
+          final jobOffer = args['jobOffer'] as Map<String, dynamic>;
+          final jobId = args['jobId'] as String;
+          final companyId = args['companyId'] as String;
           return ApplyScreen(
             jobOffer: jobOffer,
-            jobId: jobOffer['jobId'] ?? '',
-            companyId: jobOffer['companyId'] ?? '',
+            jobId: jobId,
+            companyId: companyId,
           );
         },
       },
