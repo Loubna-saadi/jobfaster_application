@@ -26,11 +26,11 @@ class JobsScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final jobOffer = jobOffers[index].data() as Map<String, dynamic>;
 
-            final title = jobOffer['jobTitle'];
-            final city = jobOffer['city'];
-            final salary = jobOffer['salary'].toString();
-            final description = jobOffer['description'];
-            final requirement = jobOffer['requirement'];
+            final title = jobOffer['jobTitle'] as String? ?? '';
+            final city = jobOffer['city'] as String? ?? '';
+            final salary = jobOffer['salary']?.toString() ?? '';
+            final description = jobOffer['description'] as String? ?? '';
+            final requirement = jobOffer['requirement'] as String? ?? '';
 
             return Card(
               shape: RoundedRectangleBorder(
@@ -42,7 +42,8 @@ class JobsScreen extends StatelessWidget {
                 children: [
                   // Company logo here
                   Image.network(
-                    jobOffer['companyLogo'], // Replace with your company logo field
+                    jobOffer['companyLogo'] as String? ??
+                        '', // Replace with your company logo field
                     height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
