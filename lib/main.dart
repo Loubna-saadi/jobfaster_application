@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jobfaster_application/screens/registration_screen.dart';
 import 'package:jobfaster_application/screens/signin_screen.dart';
 import 'package:jobfaster_application/screens/identity_screen.dart';
+import 'package:jobfaster_application/widgets/apply_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'package:jobfaster_application/screens/employer_screen.dart';
 import 'package:jobfaster_application/screens/test_screen.dart';
@@ -48,6 +49,8 @@ class MyApp extends StatelessWidget {
         CompanyInfoScreen.screenRoute: (context) => const CompanyInfoScreen(),
         CompanyProfileScreen.screenRoute: (context) => const CompanyProfileScreen(),
         JobOfferScreen.screenRoute: (context) => const JobOfferScreen(),
+        ApplyScreen.screenRoute: (context) => ApplyScreen(jobOffer: ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>),
+
       },
     );
   }

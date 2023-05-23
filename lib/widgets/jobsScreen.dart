@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'apply_screen.dart';
 class JobsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,12 @@ class JobsScreen extends StatelessWidget {
         return ListView.builder(
           itemCount: jobOffers.length,
           itemBuilder: (context, index) {
+            final jobOffer = jobOffers[index].data() as Map<String, dynamic>;
+
             return FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
                   .collection('companies')
-                  .doc(jobOffers[index]['companyId'])
+                  .doc(jobOffer['companyId'])
                   .get(),
               builder: (context, companySnapshot) {
                 if (companySnapshot.connectionState == ConnectionState.waiting) {
@@ -41,8 +43,6 @@ class JobsScreen extends StatelessWidget {
                 final companyData = companySnapshot.data?.data() as Map<String, dynamic>?;
                 final companyLogo = companyData?['profileImage'] as String? ?? '';
 
-                final jobOffer = jobOffers[index].data() as Map<String, dynamic>;
-
                 final title = jobOffer['jobTitle'] as String? ?? '';
                 final city = jobOffer['city'] as String? ?? '';
                 final salary = jobOffer['salary']?.toString() ?? '';
@@ -55,61 +55,70 @@ class JobsScreen extends StatelessWidget {
                   ),
                   elevation: 5,
                   margin: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      // Company logo here
-                      companyLogo.isNotEmpty
-                          ? Image.network(
-                              companyLogo,
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            )
-                          : SizedBox.shrink(),
-                      Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        ApplyScreen.screenRoute,
+                        arguments: jobOffer,
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        // Company logo here
+                        companyLogo.isNotEmpty
+                            ? Image.network(
+                                companyLogo,
+                                height: 200,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              )
+                            : SizedBox.shrink(),
+                        Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'City: $city',
-                              style: TextStyle(
-                                fontSize: 16,
+                              SizedBox(height: 10),
+                              Text(
+                                'City: $city',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'Salary: $salary',
-                              style: TextStyle(
-                                fontSize: 16,
+                              SizedBox(height: 10),
+                              Text(
+                                'Salary: $salary',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'Description: $description',
-                              style: TextStyle(
-                                fontSize: 16,
+                              SizedBox(height: 10),
+                              Text(
+                                'Description: $description',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'Requirement: $requirement',
-                              style: TextStyle(
-                                fontSize: 16,
+                              SizedBox(height: 10),
+                              Text(
+                                'Requirement: $requirement',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
