@@ -5,6 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 
+import 'Profile_screen.dart';
+import 'home.dart';
+
 class CompanyProfileScreen extends StatefulWidget {
   static const String screenRoute = 'compabyprofile_screen';
 
@@ -201,6 +204,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
               leading: Icon(Icons.list_alt),
               onTap: () {
                 // Handle applications menu item
+            Navigator.pushNamed(context, Home.screenRoute);
               },
             ),
             // Add more list tiles for other menu items
