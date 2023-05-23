@@ -55,6 +55,15 @@ class _JobOfferScreenState extends State<JobOfferScreen> {
     }
   }
 
+  Future<void> deleteJobOffer(String jobOfferId) async {
+    try {
+      await FirebaseFirestore.instance.collection('jobs').doc(jobOfferId).delete();
+      print('Job offer deleted successfully!');
+    } catch (error) {
+      print('Failed to delete job offer: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,17 +102,18 @@ class _JobOfferScreenState extends State<JobOfferScreen> {
             SizedBox(height: 16),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('jobs')
-                    .where('companyId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
-                    .snapshots(),
+                stream: FirebaseFirestore.instance.collection('jobs').snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
                   }
 
                   final jobOffers = snapshot.data?.docs ?? [];
@@ -117,10 +127,15 @@ class _JobOfferScreenState extends State<JobOfferScreen> {
                         child: ListTile(
                           title: Text(jobOffer['jobTitle']),
                           subtitle: Text(jobOffer['city']),
-                          trailing: Text(jobOffer['salary'].toString()),
-                          onTap: () {
-                            // Handle job offer details
-                          },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () => deleteJobOffer(jobOffers[index].id),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
