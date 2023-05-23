@@ -152,18 +152,6 @@ if (user != null) {
                 ),
                 SizedBox(height: 20),
       
-                TextFormField(
-        controller: _familyNameController,
-        decoration: InputDecoration(
-          labelText: 'FamilyName',
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-        return 'Please enter your family name';
-          }
-          return null;
-        },
-      ),SizedBox(height: 20),
       TextFormField(
         controller: _emailController,
         decoration: InputDecoration(

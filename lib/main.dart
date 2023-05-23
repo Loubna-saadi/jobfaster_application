@@ -11,7 +11,7 @@ import 'screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jobfaster_application/screens/profile_screen.dart';
 import 'package:jobfaster_application/screens/companyinfo_screen.dart';
-
+import 'package:jobfaster_application/screens/companyprofile_screen.dart';
 void main() async{
    WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
         TestScreen.screenRoute: (context) => const TestScreen(),
         ProfileScreen.screenRoute: (context) => const ProfileScreen(),
         CompanyInfoScreen.screenRoute: (context) => const CompanyInfoScreen(),
+        CompanyProfileScreen.screenRoute: (context) => const CompanyProfileScreen(),
       },
     );
   }
