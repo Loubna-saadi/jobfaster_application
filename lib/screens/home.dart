@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jobfaster_application/screens/welcome_screen.dart';
-
-import 'Profile_screen.dart';
+import 'package:jobfaster_application/screens/profile_screen.dart';
+import 'package:jobfaster_application/screens/test_screen.dart';
 
 class Home extends StatefulWidget {
   static const String screenRoute = 'home_screen';
@@ -15,8 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _auth = FirebaseAuth.instance;
-
-  late User signedInUser;
+  late User? signedInUser;
 
   @override
   void initState() {
@@ -28,14 +28,10 @@ class _HomeState extends State<Home> {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        signedInUser = user;
-        print(signedInUser.email);
-      }
-      for (final userInfo in user!.providerData) {
-        if (userInfo.providerId == 'google.com') {
+        setState(() {
           signedInUser = user;
-          break;
-        }
+        });
+        print(signedInUser!.email);
       }
     } catch (e) {
       print(e);
@@ -65,8 +61,24 @@ class _HomeState extends State<Home> {
               child: Icon(Icons.account_circle),
             ),
             onTap: () {
-              // Redirect to profile screen
-              Navigator.pushNamed(context, ProfileScreen.screenRoute);
+              // Redirect to profile screen based on role
+              if (signedInUser != null) {
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(signedInUser!.uid)
+                    .get()
+                    .then((snapshot) {
+                  if (snapshot.exists) {
+                    final userData = snapshot.data() as Map<String, dynamic>;
+                    final role = userData['role'];
+                    if (role == 'company') {
+                      Navigator.pushNamed(context, ProfileScreen.screenRoute);
+                    } else {
+                      Navigator.pushNamed(context, TestScreen.screenRoute);
+                    }
+                  }
+                });
+              }
             },
           ),
           toolbarHeight: 65,
@@ -77,8 +89,7 @@ class _HomeState extends State<Home> {
               child: IconButton(
                 onPressed: () {
                   _auth.signOut();
-                  Navigator.pushReplacementNamed(
-                      context, WelcomeScreen.screenRoutes);
+                  Navigator.pushReplacementNamed(context, WelcomeScreen.screenRoutes);
                 },
                 icon: Icon(Icons.logout),
               ),
