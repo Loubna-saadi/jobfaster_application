@@ -5,6 +5,8 @@ import 'package:jobfaster_application/screens/welcome_screen.dart';
 import 'package:jobfaster_application/screens/profile_screen.dart';
 import 'package:jobfaster_application/screens/test_screen.dart';
 
+import 'companyprofile_screen.dart';
+
 class Home extends StatefulWidget {
   static const String screenRoute = 'home_screen';
 
@@ -72,9 +74,9 @@ class _HomeState extends State<Home> {
                     final userData = snapshot.data() as Map<String, dynamic>;
                     final role = userData['role'];
                     if (role == 'company') {
-                      Navigator.pushNamed(context, ProfileScreen.screenRoute);
+                      Navigator.pushNamed(context, CompanyProfileScreen.screenRoute);
                     } else {
-                      Navigator.pushNamed(context, TestScreen.screenRoute);
+                      Navigator.pushNamed(context, ProfileScreen.screenRoute);
                     }
                   }
                 });
