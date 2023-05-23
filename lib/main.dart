@@ -49,7 +49,12 @@ class MyApp extends StatelessWidget {
         CompanyInfoScreen.screenRoute: (context) => const CompanyInfoScreen(),
         CompanyProfileScreen.screenRoute: (context) => const CompanyProfileScreen(),
         JobOfferScreen.screenRoute: (context) => const JobOfferScreen(),
-        ApplyScreen.screenRoute: (context) => ApplyScreen(jobOffer: ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>),
+     ApplyScreen.screenRoute: (context) => ApplyScreen(
+              jobOffer: ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>,
+              jobId: '', // Pass the jobId here
+              companyId: '', // Pass the companyId here
+            ),
+
 
       },
     );

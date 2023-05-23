@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'apply_screen.dart';
+
 class JobsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,11 @@ class JobsScreen extends StatelessWidget {
                       Navigator.pushNamed(
                         context,
                         ApplyScreen.screenRoute,
-                        arguments: jobOffer,
+                        arguments: {
+                          'jobOffer': jobOffer,
+                          'jobId': jobOffer['id'],
+                          'companyId': jobOffer['companyId'],
+                        },
                       );
                     },
                     child: Column(

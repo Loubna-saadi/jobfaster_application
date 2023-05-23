@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ApplyScreen extends StatelessWidget {
-   static const String screenRoute = 'apply_screen';
+  static const String screenRoute = 'apply_screen';
   final Map<String, dynamic> jobOffer;
+  final String jobId;
+  final String companyId;
 
-  ApplyScreen({required this.jobOffer});
+  ApplyScreen({
+    required this.jobOffer,
+    required this.jobId,
+    required this.companyId,
+  });
+
+  void submitApplication(String userId, String userName, String userProfileImage, String userCVFile) async {
+    try {
+      final applicationData = {
+        'userId': userId,
+        'jobOfferId': jobId,
+        'companyId': companyId,
+        'userProfileImage': userProfileImage,
+        'userName': userName,
+        'userCVFile': userCVFile,
+        'applicationDate': DateTime.now(),
+      };
+
+      await FirebaseFirestore.instance.collection('applications').add(applicationData);
+      print('Application submitted successfully!');
+    } catch (error) {
+      print('Failed to submit application: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final userId = currentUser?.uid;
+    final userName = currentUser?.displayName;
+    final userProfileImage = currentUser?.photoURL;
+
     final title = jobOffer['jobTitle'] as String? ?? '';
     final city = jobOffer['city'] as String? ?? '';
     final salary = jobOffer['salary']?.toString() ?? '';
@@ -61,7 +93,7 @@ class ApplyScreen extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Add your apply logic here
+                submitApplication(userId!, userName!, userProfileImage!, 'userCVFile');
               },
               child: Text('Apply'),
             ),
