@@ -24,75 +24,95 @@ class JobsScreen extends StatelessWidget {
         return ListView.builder(
           itemCount: jobOffers.length,
           itemBuilder: (context, index) {
-            final jobOffer = jobOffers[index].data() as Map<String, dynamic>;
+            return FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('companies')
+                  .doc(jobOffers[index]['companyId'])
+                  .get(),
+              builder: (context, companySnapshot) {
+                if (companySnapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox.shrink();
+                }
 
-            final title = jobOffer['jobTitle'] as String? ?? '';
-            final city = jobOffer['city'] as String? ?? '';
-            final salary = jobOffer['salary']?.toString() ?? '';
-            final description = jobOffer['description'] as String? ?? '';
-            final requirement = jobOffer['requirement'] as String? ?? '';
+                if (companySnapshot.hasError) {
+                  return SizedBox.shrink();
+                }
 
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              elevation: 5,
-              margin: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  // Company logo here
-                  Image.network(
-                    jobOffer['companyLogo'] as String? ??
-                        '', // Replace with your company logo field
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                final companyData = companySnapshot.data?.data() as Map<String, dynamic>?;
+                final companyLogo = companyData?['profileImage'] as String? ?? '';
+
+                final jobOffer = jobOffers[index].data() as Map<String, dynamic>;
+
+                final title = jobOffer['jobTitle'] as String? ?? '';
+                final city = jobOffer['city'] as String? ?? '';
+                final salary = jobOffer['salary']?.toString() ?? '';
+                final description = jobOffer['description'] as String? ?? '';
+                final requirement = jobOffer['requirement'] as String? ?? '';
+
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
+                  elevation: 5,
+                  margin: EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      // Company logo here
+                      companyLogo.isNotEmpty
+                          ? Image.network(
+                              companyLogo,
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                          : SizedBox.shrink(),
+                      Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'City: $city',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Salary: $salary',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Description: $description',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Requirement: $requirement',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          'City: $city',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Salary: $salary',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Description: $description',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Requirement: $requirement',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
           },
         );
