@@ -3,9 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class JobOfferScreen extends StatefulWidget {
-   static const String screenRoute = 'Joboffer_screen';
+  static const String screenRoute = 'Joboffer_screen';
 
   const JobOfferScreen({Key? key}) : super(key: key);
+
   @override
   _JobOfferScreenState createState() => _JobOfferScreenState();
 }
@@ -58,7 +59,7 @@ class _JobOfferScreenState extends State<JobOfferScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(' Job Offer'),
+        title: Text('Job Offer'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -88,6 +89,44 @@ class _JobOfferScreenState extends State<JobOfferScreen> {
             ElevatedButton(
               onPressed: submitJobOffer,
               child: Text('Submit'),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('jobs')
+                    .where('companyId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+
+                  final jobOffers = snapshot.data?.docs ?? [];
+
+                  return ListView.builder(
+                    itemCount: jobOffers.length,
+                    itemBuilder: (context, index) {
+                      final jobOffer = jobOffers[index].data() as Map<String, dynamic>;
+
+                      return Card(
+                        child: ListTile(
+                          title: Text(jobOffer['jobTitle']),
+                          subtitle: Text(jobOffer['city']),
+                          trailing: Text(jobOffer['salary'].toString()),
+                          onTap: () {
+                            // Handle job offer details
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
