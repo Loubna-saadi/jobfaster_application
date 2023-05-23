@@ -37,8 +37,10 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
         currentUser = user;
       });
 
-      final userRef = FirebaseFirestore.instance.collection('companies').doc(user.uid);
-      final DocumentSnapshot<Map<String, dynamic>> snapshot = await userRef.get();
+      final userRef =
+          FirebaseFirestore.instance.collection('companies').doc(user.uid);
+      final DocumentSnapshot<Map<String, dynamic>> snapshot =
+          await userRef.get();
       setState(() {
         userData = snapshot.data() ?? {};
         _nameController.text = userData['name'] ?? '';
@@ -83,7 +85,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
     if (pickedFile != null) {
       final file = File(pickedFile.path);
       String profileImageUrl = await uploadProfileImageToStorage(file);
-      
+
       final User? user = _auth.currentUser;
       if (user != null) {
         final userRef =
@@ -127,58 +129,80 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
     return '';
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56),
-        child: AppBar(
-          title: Column(
-            children: [
-              Text(
-                'Company Profile',
-                style: TextStyle(fontSize: 18),
-              ),
-              Divider(
-                color: Colors.grey,
-                thickness: 1,
-                height: 5,
-              ),
-            ],
-          ),
-          actions: [
-            PopupMenuButton<String>(
-              onSelected: (value) {
-                // Handle menu item selection
-                switch (value) {
-                  case 'jobOffer':
-                    // Handle job offer menu item
-                    break;
-                  case 'applications':
-                    // Handle applications menu item
-                    break;
-                  // Add more menu items and their handlers here
-                }
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                  value: 'jobOffer',
-                  child: ListTile(
-                    leading: Icon(Icons.work),
-                    title: Text('Job Offer'),
-                  ),
+      appBar: AppBar(
+        title: Text('Company Profile'),
+        leading: InkWell(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 2,
+                  width: 20,
+                  color: Colors.white,
                 ),
-                const PopupMenuItem<String>(
-                  value: 'applications',
-                  child: ListTile(
-                    leading: Icon(Icons.list_alt),
-                    title: Text('Applications'),
-                  ),
+                SizedBox(height: 4),
+                Container(
+                  height: 2,
+                  width: 20,
+                  color: Colors.white,
                 ),
-                // Add more menu items here
+                SizedBox(height: 4),
+                Container(
+                  height: 2,
+                  width: 20,
+                  color: Colors.white,
+                ),
               ],
             ),
+          ),
+          onTap: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Job Offer'),
+              leading: Icon(Icons.work),
+              onTap: () {
+                // Handle job offer menu item
+              },
+            ),
+            ListTile(
+              title: Text('Applications'),
+              leading: Icon(Icons.list_alt),
+              onTap: () {
+                // Handle applications menu item
+              },
+            ),
+            // Add more list tiles for other menu items
           ],
         ),
       ),
@@ -187,7 +211,63 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Existing code for displaying user data
+              if (userData.isNotEmpty) ...[
+                Container(
+                  margin: EdgeInsets.only(bottom: 16),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(userData['profileImage'] ?? ''),
+                            fit: BoxFit.cover,
+                          ),
+                          border: Border.all(
+                            color: Colors.blue,
+                            width: 4,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Name: ${userData['name'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Email: ${userData['email'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'City: ${userData['city'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Speciality: ${userData['specialty'] ?? ''}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               SizedBox(height: 24),
               TextField(
                 controller: _nameController,
