@@ -7,6 +7,7 @@ import 'dart:io';
 
 import 'Profile_screen.dart';
 import 'home.dart';
+import 'joboffer_screen.dart';
 
 class CompanyProfileScreen extends StatefulWidget {
   static const String screenRoute = 'compabyprofile_screen';
@@ -197,6 +198,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
               leading: Icon(Icons.work),
               onTap: () {
                 // Handle job offer menu item
+                 Navigator.pushNamed(context,JobOfferScreen.screenRoute);
               },
             ),
             ListTile(
