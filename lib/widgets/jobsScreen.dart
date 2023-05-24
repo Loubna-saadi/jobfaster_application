@@ -66,7 +66,7 @@ class JobsScreen extends StatelessWidget {
                         ApplyScreen.screenRoute,
                         arguments: {
                           'jobOffer': jobOffer,
-                          'jobId': jobOffer['id'] as String? ?? '',
+                          'jobId': jobOffers[index].id, // Pass the jobId here
                           'companyId': jobOffer['companyId'] as String? ?? '',
                         },
                       );

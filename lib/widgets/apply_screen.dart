@@ -31,7 +31,9 @@ class ApplyScreen extends StatelessWidget {
         'applicationDate': DateTime.now(),
       };
 
-      await FirebaseFirestore.instance.collection('applications').add(applicationData);
+      await FirebaseFirestore.instance
+          .collection('applications')
+          .add(applicationData);
       print('Application submitted successfully!');
     } catch (error) {
       print('Failed to submit application: $error');
@@ -101,11 +103,14 @@ class ApplyScreen extends StatelessWidget {
                 if (userId != null) {
                   final userDoc = await userCollection.doc(userId).get();
                   if (userDoc.exists) {
-                    final userData = userDoc.data() as Map<String, dynamic>?;
+                    final userData =
+                        userDoc.data() as Map<String, dynamic>?;
                     final userName = userData?['name'] as String?;
-                    final userProfileImage = userData?['profileImage'] as String?;
+                    final userProfileImage =
+                        userData?['profileImage'] as String?;
                     if (userName != null && userProfileImage != null) {
-                      submitApplication(userId, userName, userProfileImage, 'cvFileUrl');
+                      submitApplication(
+                          userId, userName, userProfileImage, 'cvFileUrl');
                     } else {
                       print('User information not available');
                     }
