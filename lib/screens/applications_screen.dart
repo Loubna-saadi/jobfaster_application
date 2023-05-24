@@ -53,9 +53,9 @@ class ApplicationsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final application = applications[index];
               final userId = application['userId'] as String?;
-              final userName = application['userName'] as String?;
+              final jobId = application['jobOfferId'] as String?;
               final userProfileImage = application['userProfileImage'] as String?;
-              final jobId = application['jobId'] as String?;
+              final userName = application['userName'] as String?;
               final applicationDate = application['applicationDate'] as Timestamp?;
 
               return FutureBuilder<DocumentSnapshot>(
