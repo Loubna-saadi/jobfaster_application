@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ApplicationsScreen extends StatelessWidget {
   static const String screenRoute = 'applications_screen';
@@ -117,21 +118,28 @@ class ApplicationsScreen extends StatelessWidget {
   }
 
   // Method to download the CV file
-  void downloadCV(String userCVFile) async {
-    final taskId = await FlutterDownloader.enqueue(
-      url: userCVFile,
-      savedDir:
-          'path/to/save/directory', // Replace with your desired directory path
-      fileName: 'cv_file.pdf', // Replace with your desired file name
-      showNotification: true,
-      openFileFromNotification: true,
-    );
+void downloadCV(String userCVFile) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final savePath = '${directory.path}/cv_file.pdf';
 
-    FlutterDownloader.registerCallback((id, status, _) {
-      if (id == taskId && status == DownloadTaskStatus.complete) {
-        // File has been downloaded successfully
-        // You can implement additional logic here, such as showing a success message
-      }
-    });
-  }
+  final taskId = await FlutterDownloader.enqueue(
+    url: userCVFile,
+    savedDir: directory.path,
+    fileName: 'cv_file.pdf',
+    showNotification: true,
+    openFileFromNotification: true,
+  );
+
+  FlutterDownloader.registerCallback((id, status, _) {
+    if (id == taskId && status == DownloadTaskStatus.complete) {
+      // File has been downloaded successfully
+      // You can implement additional logic here, such as showing a success message
+
+      // If you want to access the downloaded file path, you can use the savePath variable
+      // It contains the full path to the downloaded file in the app's documents directory
+      print('File downloaded at: $savePath');
+    }
+  });
+}
+
 }
