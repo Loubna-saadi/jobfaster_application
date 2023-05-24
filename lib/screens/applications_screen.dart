@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 class ApplicationsScreen extends StatelessWidget {
   static const String screenRoute = 'applications_screen';
@@ -65,18 +66,18 @@ class ApplicationsScreen extends StatelessWidget {
               }
 
               return FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance.collection('jobs').doc(jobId).get(),
+                future: FirebaseFirestore.instance.collection('test').doc(userId).get(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   }
 
                   if (!snapshot.hasData) {
-                    return Text('Loading job...');
+                    return Text('Loading user CV...');
                   }
 
-                  final jobData = snapshot.data!.data() as Map<String, dynamic>?;
-                  final jobTitle = jobData?['jobTitle'] as String?;
+                  final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                  final userCVFile = userData?['cvFile'] as String?;
 
                   return Card(
                     child: ListTile(
@@ -86,17 +87,14 @@ class ApplicationsScreen extends StatelessWidget {
                             )
                           : Icon(Icons.person),
                       title: Text(userName ?? 'N/A'),
-                      subtitle: Text(jobTitle ?? 'N/A'),
-                      trailing: Text(
-                        applicationDate != null
-                            ? applicationDate.toDate().toString()
-                            : 'N/A',
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          if (userCVFile != null) {
+                            downloadCV(userCVFile);
+                          }
+                        },
+                        child: Text('Download CV'),
                       ),
-                      onTap: () {
-                        // Handle the onTap event to download the user's CV
-                        // You can implement the logic to download the CV here
-                        print('Download CV for application: ${application.id}');
-                      },
                     ),
                   );
                 },
@@ -106,5 +104,23 @@ class ApplicationsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  // Method to download the CV file
+  void downloadCV(String userCVFile) async {
+    final taskId = await FlutterDownloader.enqueue(
+      url: userCVFile,
+      savedDir: 'path/to/save/directory', // Replace with your desired directory path
+      fileName: 'cv_file.pdf', // Replace with your desired file name
+      showNotification: true,
+      openFileFromNotification: true,
+    );
+
+    FlutterDownloader.registerCallback((id, status, _) {
+      if (id == taskId && status == DownloadTaskStatus.complete) {
+        // File has been downloaded successfully
+        // You can implement additional logic here, such as showing a success message
+      }
+    });
   }
 }
