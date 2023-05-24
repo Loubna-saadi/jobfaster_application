@@ -102,10 +102,10 @@ class ApplyScreen extends StatelessWidget {
                   final userDoc = await userCollection.doc(userId).get();
                   if (userDoc.exists) {
                     final userData = userDoc.data() as Map<String, dynamic>?;
-                    final userName = userData?['userName'] as String?;
-                    final userProfileImage = userData?['userProfileImage'] as String?;
+                    final userName = userData?['name'] as String?;
+                    final userProfileImage = userData?['profileImage'] as String?;
                     if (userName != null && userProfileImage != null) {
-                      submitApplication(userId, userName, userProfileImage, 'userCVFile');
+                      submitApplication(userId, userName, userProfileImage, 'cvFileUrl');
                     } else {
                       print('User information not available');
                     }
