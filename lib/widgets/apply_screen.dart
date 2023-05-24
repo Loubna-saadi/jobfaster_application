@@ -92,9 +92,14 @@ class ApplyScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                submitApplication(userId!, userName!, userProfileImage!, 'userCVFile');
-              },
+           onPressed: () {
+  if (userId != null && userName != null && userProfileImage != null) {
+    submitApplication(userId, userName, userProfileImage, 'userCVFile');
+  } else {
+    print('User information not available');
+  }
+},
+
               child: Text('Apply'),
             ),
           ],
