@@ -48,41 +48,40 @@ class ApplicationsScreen extends StatelessWidget {
             return Text('No applications found.');
           }
 
-          return ListView.builder(
-            itemCount: applications.length,
-            itemBuilder: (context, index) {
-              final application = applications[index];
-              final userId = application['userId'] as String?;
-              final userName = application['userName'] as String?;
-              final userProfileImage =
-                  application['userProfileImage'] as String?;
-              final jobTitle = application['jobTitle'] as String?;
-              final applicationDate =
-                  application['applicationDate'] as Timestamp?;
+       return ListView.builder(
+  itemCount: applications.length,
+  itemBuilder: (context, index) {
+    final application = applications[index];
+    final userId = application['userId'] as String?;
+    final userName = application['userName'] as String?;
+    final userProfileImage = application['userProfileImage'] as String?;
+    final jobTitle = application['jobTitle'] as String?;
+    final applicationDate = application['applicationDate'] as Timestamp?;
 
-              return Card(
-                child: ListTile(
-                  leading: userProfileImage != null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(userProfileImage),
-                        )
-                      : Icon(Icons.person),
-                  title: Text(userName ?? 'N/A'),
-                  subtitle: Text(jobTitle ?? 'N/A'),
-                  trailing: Text(
-                    applicationDate != null
-                        ? applicationDate.toDate().toString()
-                        : 'N/A',
-                  ),
-                  onTap: () {
-                    // Handle the onTap event to download the user's CV
-                    // You can implement the logic to download the CV here
-                    print('Download CV for application: ${application.id}');
-                  },
-                ),
-              );
-            },
-          );
+    return Card(
+      child: ListTile(
+        leading: userProfileImage != null
+            ? CircleAvatar(
+                backgroundImage: NetworkImage(userProfileImage),
+              )
+            : Icon(Icons.person),
+        title: Text(userName ?? 'N/A'),
+        subtitle: Text(jobTitle ?? 'N/A'),
+        trailing: Text(
+          applicationDate != null
+              ? applicationDate.toDate().toString()
+              : 'N/A',
+        ),
+        onTap: () {
+          // Handle the onTap event to download the user's CV
+          // You can implement the logic to download the CV here
+          print('Download CV for application: ${application.id}');
+        },
+      ),
+    );
+  },
+);
+
         },
       ),
     );
