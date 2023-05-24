@@ -14,7 +14,12 @@ class ApplyScreen extends StatelessWidget {
     required this.companyId,
   });
 
-  void submitApplication(String userId, String userName, String userProfileImage, String userCVFile) async {
+  void submitApplication(
+    String userId,
+    String userName,
+    String userProfileImage,
+    String userCVFile,
+  ) async {
     try {
       final applicationData = {
         'userId': userId,
@@ -35,20 +40,17 @@ class ApplyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final currentUser = FirebaseAuth.instance.currentUser;
     final userId = currentUser?.uid;
-    final userName = currentUser?.displayName;
-    final userProfileImage = currentUser?.photoURL;
-
+    final userCollection = FirebaseFirestore.instance.collection('test');
     final title = jobOffer['jobTitle'] as String? ?? '';
     final city = jobOffer['city'] as String? ?? '';
     final salary = jobOffer['salary']?.toString() ?? '';
     final description = jobOffer['description'] as String? ?? '';
     final requirement = jobOffer['requirement'] as String? ?? '';
-print('userId: $userId');
-print('userName: $userName');
-print('userProfileImage: $userProfileImage');
+
+    print('userId: $userId');
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Apply for Job'),
@@ -95,14 +97,25 @@ print('userProfileImage: $userProfileImage');
             ),
             SizedBox(height: 16),
             ElevatedButton(
-           onPressed: () {
-  if (userId != null && userName != null && userProfileImage != null) {
-    submitApplication(userId, userName, userProfileImage, 'userCVFile');
-  } else {
-    print('User information not available');
-  }
-},
-
+              onPressed: () async {
+                if (userId != null) {
+                  final userDoc = await userCollection.doc(userId).get();
+                  if (userDoc.exists) {
+                    final userData = userDoc.data() as Map<String, dynamic>?;
+                    final userName = userData?['userName'] as String?;
+                    final userProfileImage = userData?['userProfileImage'] as String?;
+                    if (userName != null && userProfileImage != null) {
+                      submitApplication(userId, userName, userProfileImage, 'userCVFile');
+                    } else {
+                      print('User information not available');
+                    }
+                  } else {
+                    print('User document not found');
+                  }
+                } else {
+                  print('User ID not available');
+                }
+              },
               child: Text('Apply'),
             ),
           ],
