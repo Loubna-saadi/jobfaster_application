@@ -15,8 +15,14 @@ import 'package:jobfaster_application/screens/companyinfo_screen.dart';
 import 'package:jobfaster_application/screens/companyprofile_screen.dart';
 import 'package:jobfaster_application/screens/joboffer_screen.dart';
 import 'package:jobfaster_application/screens/applications_screen.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  await FlutterDownloader.initialize(
+    debug: true // Set to false in release mode
+  );
   await Firebase.initializeApp();
 
   final auth = FirebaseAuth.instance;
