@@ -35,6 +35,7 @@ class ApplyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final currentUser = FirebaseAuth.instance.currentUser;
     final userId = currentUser?.uid;
     final userName = currentUser?.displayName;
@@ -45,7 +46,9 @@ class ApplyScreen extends StatelessWidget {
     final salary = jobOffer['salary']?.toString() ?? '';
     final description = jobOffer['description'] as String? ?? '';
     final requirement = jobOffer['requirement'] as String? ?? '';
-
+print('userId: $userId');
+print('userName: $userName');
+print('userProfileImage: $userProfileImage');
     return Scaffold(
       appBar: AppBar(
         title: Text('Apply for Job'),
