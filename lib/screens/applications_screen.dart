@@ -118,28 +118,22 @@ class ApplicationsScreen extends StatelessWidget {
   }
 
   // Method to download the CV file
-void downloadCV(String userCVFile) async {
-  final directory = await getApplicationDocumentsDirectory();
-  final savePath = '${directory.path}/cv_file.pdf';
+  void downloadCV(String userCVFile) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final savePath = '${directory.path}/cv_file.pdf';
 
-  final taskId = await FlutterDownloader.enqueue(
-    url: userCVFile,
-    savedDir: directory.path,
-    fileName: 'cv_file.pdf',
-    showNotification: true,
-    openFileFromNotification: true,
-  );
+    final taskId = await FlutterDownloader.enqueue(
+      url: userCVFile,
+      savedDir: directory.path,
+      fileName: 'cv_file.pdf',
+      showNotification: true,
+      openFileFromNotification: true,
+    );
 
-  FlutterDownloader.registerCallback((id, status, _) {
-    if (id == taskId && status == DownloadTaskStatus.complete) {
-      // File has been downloaded successfully
-      // You can implement additional logic here, such as showing a success message
-
-      // If you want to access the downloaded file path, you can use the savePath variable
-      // It contains the full path to the downloaded file in the app's documents directory
-      print('File downloaded at: $savePath');
-    }
-  });
-}
-
+    FlutterDownloader.registerCallback((id, status, _) {
+      if (id == taskId && status == DownloadTaskStatus.complete) {
+        print('File downloaded at: $savePath');
+      }
+    });
+  }
 }
