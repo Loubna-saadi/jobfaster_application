@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 
 import 'Profile_screen.dart';
+import 'applications_screen.dart';
 import 'home.dart';
 import 'joboffer_screen.dart';
 
@@ -206,7 +207,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
               leading: Icon(Icons.list_alt),
               onTap: () {
                 // Handle applications menu item
-            Navigator.pushNamed(context, Home.screenRoute);
+            Navigator.pushNamed(context, ApplicationsScreen.screenRoute);
               },
             ),
             // Add more list tiles for other menu items
