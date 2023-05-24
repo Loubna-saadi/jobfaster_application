@@ -55,9 +55,11 @@ class ApplicationsScreen extends StatelessWidget {
               final application = applications[index];
               final userId = application['userId'] as String?;
               final jobId = application['jobOfferId'] as String?;
-              final userProfileImage = application['userProfileImage'] as String?;
+              final userProfileImage =
+                  application['userProfileImage'] as String?;
               final userName = application['userName'] as String?;
-              final applicationDate = application['applicationDate'] as Timestamp?;
+              final applicationDate =
+                  application['applicationDate'] as Timestamp?;
 
               if (jobId == null || jobId.isEmpty) {
                 return ListTile(
@@ -66,18 +68,26 @@ class ApplicationsScreen extends StatelessWidget {
               }
 
               return FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance.collection('test').doc(userId).get(),
+                future: FirebaseFirestore.instance
+                    .collection('test')
+                    .doc(userId)
+                    .get(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   }
 
-                  if (!snapshot.hasData) {
-                    return Text('Loading user CV...');
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return Text('User data not found.');
                   }
 
-                  final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                  final userData =
+                      snapshot.data!.data() as Map<String, dynamic>?;
                   final userCVFile = userData?['cvFileUrl'] as String?;
+
+                  if (userCVFile == null) {
+                    return Text('CV file not available.');
+                  }
 
                   return Card(
                     child: ListTile(
@@ -110,7 +120,8 @@ class ApplicationsScreen extends StatelessWidget {
   void downloadCV(String userCVFile) async {
     final taskId = await FlutterDownloader.enqueue(
       url: userCVFile,
-      savedDir: 'path/to/save/directory', // Replace with your desired directory path
+      savedDir:
+          'path/to/save/directory', // Replace with your desired directory path
       fileName: 'cv_file.pdf', // Replace with your desired file name
       showNotification: true,
       openFileFromNotification: true,
