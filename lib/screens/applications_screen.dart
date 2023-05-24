@@ -77,7 +77,7 @@ class ApplicationsScreen extends StatelessWidget {
                   }
 
                   final userData = snapshot.data!.data() as Map<String, dynamic>?;
-                  final userCVFile = userData?['cvFile'] as String?;
+                  final userCVFile = userData?['cvFileUrl'] as String?;
 
                   return Card(
                     child: ListTile(
