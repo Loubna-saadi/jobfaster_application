@@ -58,6 +58,12 @@ class ApplicationsScreen extends StatelessWidget {
               final userName = application['userName'] as String?;
               final applicationDate = application['applicationDate'] as Timestamp?;
 
+              if (jobId == null || jobId.isEmpty) {
+                return ListTile(
+                  title: Text('Job data missing'),
+                );
+              }
+
               return FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance.collection('jobs').doc(jobId).get(),
                 builder: (context, snapshot) {
