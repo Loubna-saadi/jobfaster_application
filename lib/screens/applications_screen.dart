@@ -121,12 +121,12 @@ class ApplicationsScreen extends StatelessWidget {
   }
 
   // Method to download the CV file
-  void downloadCV(String url) async {
+ void downloadCV(String url) async {
     Dio dio = Dio();
     try {
-      // Get the application documents directory
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String appDocPath = appDocDir.path;
+      // Get the downloads directory
+      Directory? downloadsDirectory = await getDownloadsDirectory();
+      String? downloadsPath = downloadsDirectory?.path;
 
       // Extract the file name from the URL
       String fileName = url.substring(url.lastIndexOf("/") + 1);
@@ -138,8 +138,8 @@ class ApplicationsScreen extends StatelessWidget {
               followRedirects: false,
               receiveTimeout: Duration(seconds: 30)));
 
-      // Save the file to the application documents directory
-      File file = File('$appDocPath/$fileName');
+      // Save the file to the downloads directory
+      File file = File('$downloadsPath/$fileName');
       await file.writeAsBytes(response.data, flush: true);
 
       print('File downloaded at: ${file.path}');
@@ -147,4 +147,5 @@ class ApplicationsScreen extends StatelessWidget {
       print('Error downloading file: $e');
     }
   }
+
 }
