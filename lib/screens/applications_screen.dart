@@ -121,34 +121,25 @@ class ApplicationsScreen extends StatelessWidget {
   }
 
   // Method to download the CV file
- void downloadCV(String url) async {
-  Dio dio = Dio();
+void downloadCV(String url) async {
   try {
-    // Get the external storage directory path using the path_provider package
-    Directory? externalDir = await getExternalStorageDirectory();
-    String? externalPath = externalDir?.path;
-
     // Extract the file name from the URL
     String fileName = path.basename(url);
 
-    // Download the file
-    Response response = await dio.get(
-      url,
-      options: Options(
-        responseType: ResponseType.bytes,
-        followRedirects: false,
-        receiveTimeout: Duration(seconds: 30),
-      ),
+    // Enqueue the download task using FlutterDownloader
+    final taskId = await FlutterDownloader.enqueue(
+      url: url,
+      fileName: fileName,
+      savedDir: '/storage/emulated/0/Download',
+      showNotification: true,
+      openFileFromNotification: true,
     );
 
-    // Save the file to the external storage directory
-    File file = File('$externalPath/$fileName');
-    await file.writeAsBytes(response.data, flush: true);
-
-    print('File downloaded at: ${file.path}');
+    print('Download task enqueued with ID: $taskId');
   } catch (e) {
     print('Error downloading file: $e');
   }
 }
+
 
 }
