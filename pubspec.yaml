@@ -24,6 +24,8 @@ dependencies:
   dio: ^5.1.2
   get_it: ^7.2.0
   intl: ^0.17.0
+  http: ^0.13.3
+  permission_handler_platform_interface: ^3.0.1
   
   
   

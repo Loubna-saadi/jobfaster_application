@@ -1,11 +1,11 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
-import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
 
 class ApplicationsScreen extends StatelessWidget {
   static const String screenRoute = 'applications_screen';
@@ -123,19 +123,22 @@ class ApplicationsScreen extends StatelessWidget {
   // Method to download the CV file
 void downloadCV(String url) async {
   try {
+    // Get the downloads directory
+    Directory? downloadsDirectory = await getExternalStorageDirectory();
+    String? downloadsPath = downloadsDirectory?.path;
+
     // Extract the file name from the URL
-    String fileName = path.basename(url);
+    String fileName = url.substring(url.lastIndexOf("/") + 1);
 
-    // Enqueue the download task using FlutterDownloader
-    final taskId = await FlutterDownloader.enqueue(
-      url: url,
-      fileName: fileName,
-      savedDir: '/storage/emulated/0/Download',
-      showNotification: true,
-      openFileFromNotification: true,
-    );
+    // Download the file
+    Dio dio = Dio();
+    Response response = await dio.get(url, options: Options(responseType: ResponseType.bytes));
 
-    print('Download task enqueued with ID: $taskId');
+    // Save the file to the downloads directory
+    File file = File('$downloadsPath/$fileName');
+    await file.writeAsBytes(response.data, flush: true);
+
+    print('File downloaded at: ${file.path}');
   } catch (e) {
     print('Error downloading file: $e');
   }
