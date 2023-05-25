@@ -121,33 +121,34 @@ class ApplicationsScreen extends StatelessWidget {
   }
 
   // Method to download the CV file
-  void downloadCV(String url) async {
-    Dio dio = Dio();
-    try {
-      // Get the downloads directory path using the path_provider package
-      Directory? downloadsDirectory = await getDownloadsDirectory();
-      String? downloadsPath = downloadsDirectory?.path;
+ void downloadCV(String url) async {
+  Dio dio = Dio();
+  try {
+    // Get the external storage directory path using the path_provider package
+    Directory? externalDir = await getExternalStorageDirectory();
+    String? externalPath = externalDir?.path;
 
-      // Extract the file name from the URL
-      String fileName = path.basename(url);
+    // Extract the file name from the URL
+    String fileName = path.basename(url);
 
-      // Download the file
-      Response response = await dio.get(
-        url,
-        options: Options(
-          responseType: ResponseType.bytes,
-          followRedirects: false,
-          receiveTimeout: Duration(seconds: 30),
-        ),
-      );
+    // Download the file
+    Response response = await dio.get(
+      url,
+      options: Options(
+        responseType: ResponseType.bytes,
+        followRedirects: false,
+        receiveTimeout: Duration(seconds: 30),
+      ),
+    );
 
-      // Save the file to the device's Downloads directory
-      File file = File('$downloadsPath/$fileName');
-      await file.writeAsBytes(response.data, flush: true);
+    // Save the file to the external storage directory
+    File file = File('$externalPath/$fileName');
+    await file.writeAsBytes(response.data, flush: true);
 
-      print('File downloaded at: ${file.path}');
-    } catch (e) {
-      print('Error downloading file: $e');
-    }
+    print('File downloaded at: ${file.path}');
+  } catch (e) {
+    print('Error downloading file: $e');
   }
+}
+
 }

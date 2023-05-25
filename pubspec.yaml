@@ -19,11 +19,12 @@ dependencies:
   firebase_storage: ^11.2.0
   image_picker: ^0.8.4+4
   cupertino_icons: ^1.0.2
-  path_provider: ^2.0.2
+  path_provider: ^2.0.5
   file_picker: ^4.0.0
   dio: ^5.1.2
   get_it: ^7.2.0
   intl: ^0.17.0
+  
   
 
 dev_dependencies:
