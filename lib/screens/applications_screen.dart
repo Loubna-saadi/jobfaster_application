@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
 
 class ApplicationsScreen extends StatelessWidget {
   static const String screenRoute = 'applications_screen';
@@ -118,22 +121,30 @@ class ApplicationsScreen extends StatelessWidget {
   }
 
   // Method to download the CV file
-  void downloadCV(String userCVFile) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final savePath = '${directory.path}/cv_file.pdf';
+void downloadCV(String url) async {
+  Dio dio = Dio();
+  try {
+    // Get the application documents directory
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
 
-    final taskId = await FlutterDownloader.enqueue(
-      url: userCVFile,
-      savedDir: directory.path,
-      fileName: 'cv_file.pdf',
-      showNotification: true,
-      openFileFromNotification: true,
-    );
+    // Extract the file name from the URL
+    String fileName = url.substring(url.lastIndexOf("/") + 1);
 
-    FlutterDownloader.registerCallback((id, status, _) {
-      if (id == taskId && status == DownloadTaskStatus.complete) {
-        print('File downloaded at: $savePath');
-      }
-    });
+    // Download the file
+    Response response = await dio.get(url,
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            receiveTimeout: Duration(seconds: 0)));
+
+    // Save the file to the application documents directory
+    File file = File('$appDocPath/$fileName');
+    await file.writeAsBytes(response.data, flush: true);
+
+    print('File downloaded at: ${file.path}');
+  } catch (e) {
+    print('Error downloading file: $e');
   }
+}
 }
