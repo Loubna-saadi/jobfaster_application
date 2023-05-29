@@ -75,11 +75,14 @@ class JobsScreen extends StatelessWidget {
                       children: [
                         // Company logo here
                         companyLogo.isNotEmpty
-                            ? Image.network(
-                                companyLogo,
-                                height: 200,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Image.network(
+                                  companyLogo,
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
                               )
                             : SizedBox.shrink(),
                         Padding(
