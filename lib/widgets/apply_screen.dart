@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'my_button.dart';
+
 class ApplyScreen extends StatelessWidget {
   static const String screenRoute = 'apply_screen';
   final Map<String, dynamic> jobOffer;
@@ -108,7 +110,15 @@ class ApplyScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            ElevatedButton(
+           MyButton(
+                           gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
               onPressed: () async {
                 if (userId != null) {
                   final userDoc = await userCollection.doc(userId).get();
@@ -131,7 +141,7 @@ class ApplyScreen extends StatelessWidget {
                   print('User ID not available');
                 }
               },
-              child: Text('Apply'),
+              title: 'Apply',
             ),
           ],
         ),

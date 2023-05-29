@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../widgets/my_button.dart';
+
 class JobOfferScreen extends StatefulWidget {
   static const String screenRoute = 'Joboffer_screen';
 
@@ -108,9 +110,17 @@ class _JobOfferScreenState extends State<JobOfferScreen> {
               decoration: InputDecoration(labelText: 'Requirement'),
             ),
             SizedBox(height: 16),
-            ElevatedButton(
+            MyButton(
+                             gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
               onPressed: submitJobOffer,
-              child: Text('Submit'),
+              title:'Submit',
             ),
             SizedBox(height: 16),
             Expanded(

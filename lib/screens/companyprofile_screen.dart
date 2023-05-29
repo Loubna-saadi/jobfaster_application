@@ -164,13 +164,13 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                 SizedBox(height: 4),
                 Container(
                   height: 2,
-                  width: 40,
+                  width: 80,
                   color: Colors.white,
                 ),
                 SizedBox(height: 4),
                 Container(
                   height: 2,
-                  width: 40,
+                  width: 80,
                   color: Colors.white,
                 ),
               ],
