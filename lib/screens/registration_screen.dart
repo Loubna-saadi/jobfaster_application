@@ -173,7 +173,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         Expanded(
                           flex: 1,
                           child: RadioListTile(
-                            title: const Text('Employee'),
+                            title: const Text('Employee',style: TextStyle(color: Colors.white)),
                             value: 'employee',
                             groupValue: selectedRole,
                             onChanged: (value) {
@@ -186,7 +186,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         Expanded(
                           flex: 1,
                           child: RadioListTile(
-                            title: const Text('Company'),
+                            title: const Text('Company',style: TextStyle(color: Colors.white)),
                             value: 'company',
                             groupValue: selectedRole,
                             onChanged: (value) {
