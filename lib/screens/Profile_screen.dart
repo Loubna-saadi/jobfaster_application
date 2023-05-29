@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 
+import '../widgets/my_button.dart';
+
 class ProfileScreen extends StatefulWidget {
   static const String screenRoute = 'profile_screen';
 
@@ -240,14 +242,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                
               ),
               
-              ElevatedButton(
+              MyButton(
+                               gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
                 onPressed: _updateProfile,
-                child: Text('Update Profile'),
+                title: 'Update Profile',
               ),
               SizedBox(height: 16),
-              ElevatedButton(
+              MyButton(
+                               gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
                 onPressed: _updateProfilePicture,
-                child: Text('Update Profile Picture'),
+                title:'Update Profile Picture',
               ),
             ],
           ),

@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:file_picker/file_picker.dart';
 import 'package:jobfaster_application/screens/home.dart';
 
+import '../widgets/my_button.dart';
+
 class TestScreen extends StatefulWidget {
   static const String screenRoute = 'test_screen';
 
@@ -125,7 +127,17 @@ if (user != null) {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Test Page'),
+           flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 139, 124, 247),
+                Color(0xFF1BAFAF),
+              ],
+            ),
+          ),
+        ),
+        title: Text('employee informations'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -247,14 +259,30 @@ if (user != null) {
                     return null;
                   },
                 ),
-                ElevatedButton(
+               MyButton(
+                                 gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
                   onPressed: _getCvFromGallery,
-                  child: Text('Select CV'),
+                  title:'Select CV',
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
+                MyButton(
+                                 gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
                   onPressed: _submitForm,
-                  child: Text('Submit'),
+                  title:'Submit',
                 ),
               ],
             ),
