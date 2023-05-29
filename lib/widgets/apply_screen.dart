@@ -55,6 +55,16 @@ class ApplyScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+          flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 139, 124, 247),
+                Color(0xFF1BAFAF),
+              ],
+            ),
+          ),
+        ),
         title: Text('Apply for Job'),
       ),
       body: Padding(

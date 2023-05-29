@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '../widgets/my_button.dart';
-import 'Profile_screen.dart';
 import 'applications_screen.dart';
-import 'home.dart';
 import 'joboffer_screen.dart';
 
 class CompanyProfileScreen extends StatefulWidget {
@@ -26,7 +25,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
   final _emailController = TextEditingController();
   final _cityController = TextEditingController();
   final _specialityController = TextEditingController();
- GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late User? currentUser;
   Map<String, dynamic> userData = {};
 
@@ -135,12 +134,12 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
     return '';
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-          flexibleSpace: Container(
+        flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -159,19 +158,19 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
               children: [
                 Container(
                   height: 2,
-                  width: 20,
+                  width: 40,
                   color: Colors.white,
                 ),
                 SizedBox(height: 4),
                 Container(
                   height: 2,
-                  width: 20,
+                  width: 40,
                   color: Colors.white,
                 ),
                 SizedBox(height: 4),
                 Container(
                   height: 2,
-                  width: 20,
+                  width: 40,
                   color: Colors.white,
                 ),
               ],
@@ -210,7 +209,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
               leading: Icon(Icons.work),
               onTap: () {
                 // Handle job offer menu item
-                 Navigator.pushNamed(context,JobOfferScreen.screenRoute);
+                Navigator.pushNamed(context, JobOfferScreen.screenRoute);
               },
             ),
             ListTile(
@@ -218,7 +217,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
               leading: Icon(Icons.list_alt),
               onTap: () {
                 // Handle applications menu item
-            Navigator.pushNamed(context, ApplicationsScreen.screenRoute);
+                Navigator.pushNamed(context, ApplicationsScreen.screenRoute);
               },
             ),
             // Add more list tiles for other menu items
@@ -317,24 +316,31 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                 controller: _specialityController,
               ),
               MyButton(
-                    gradient: const LinearGradient(
-                colors: [Color.fromARGB(255, 139, 124, 247), Color(0xFF1BAFAF)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
+                gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                onPressed: _updateProfilePicture,
+                title: 'Update Profile Picture',
               ),
+               SizedBox(height: 8),
+              MyButton(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
                 onPressed: _updateProfile,
                 title: 'Update Profile',
               ),
-              SizedBox(height: 16),
-             MyButton(
-                  gradient: const LinearGradient(
-                colors: [Color.fromARGB(255, 139, 124, 247), Color(0xFF1BAFAF)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-                onPressed: _updateProfilePicture,
-                title:'Update Profile Picture',
-              ),
+             
             ],
           ),
         ),
