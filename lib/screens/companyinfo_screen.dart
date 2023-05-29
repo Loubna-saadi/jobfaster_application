@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:file_picker/file_picker.dart';
 import 'package:jobfaster_application/screens/home.dart';
 
+import '../widgets/my_button.dart';
+
 class CompanyInfoScreen extends StatefulWidget {
   static const String screenRoute = 'companyinfo_screen';
 
@@ -213,9 +215,17 @@ if (user != null) {
       
             
                 SizedBox(height: 20),
-                ElevatedButton(
+                MyButton(
+                                 gradient: const LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 139, 124, 247),
+                    Color(0xFF1BAFAF)
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
                   onPressed: _submitForm,
-                  child: Text('Submit'),
+                  title: 'Submit',
                 ),
               ],
             ),
