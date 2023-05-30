@@ -6,6 +6,7 @@ import 'package:jobfaster_application/screens/profile_screen.dart';
 import 'package:jobfaster_application/screens/test_screen.dart';
 
 import '../widgets/jobsScreen.dart';
+import '../widgets/employeeslist.dart';
 import 'companyprofile_screen.dart';
 
 class Home extends StatefulWidget {
@@ -115,6 +116,8 @@ class _HomeState extends State<Home> {
         body: TabBarView(
          children: [
           JobsScreen(),
+          EmployeesList(),
+
         ],
         ),
       ),
