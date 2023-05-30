@@ -66,7 +66,7 @@ class EmployeesList extends StatelessWidget {
                                     vertical: 10.0, horizontal: 5),
                                 child: DefaultTextStyle(
                                   style: TextStyle(
-                                    color: Colors.grey.shade800,
+                                    color: Colors.white,
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
