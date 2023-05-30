@@ -35,6 +35,7 @@ class EmployeesList extends StatelessWidget {
                           bottomLeft: Radius.circular(15),
                         ),
                         child: Container(
+                          padding: EdgeInsets.all(10),
                            decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color.fromARGB(255, 139, 124, 247), Color(0xFF1BAFAF)],
