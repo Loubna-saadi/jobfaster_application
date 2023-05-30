@@ -36,7 +36,7 @@ class EmployeesList extends StatelessWidget {
                         ),
                         child: Container(
                           padding: EdgeInsets.all(10),
-                          color: Color.fromARGB(255, 157, 78, 118),
+                          color: Color(0xFF16113A),
                           width: MediaQuery.of(context).size.width * 1,
                           height: 220,
                           child: Row(
@@ -78,14 +78,18 @@ class EmployeesList extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                              '${employee['specialty']} '),
-                                          SizedBox(width: 3),
-                                          Text(' | '),
-                                          SizedBox(width: 3),
-                                          Text('${employee['city']}'),
+                                            'speciality:''${employee['specialty']} '),
+                                          
+                                         
                                         ],
                                       ),
                                       SizedBox(height: 30),
+                                         Row(
+                                        children: [
+                                        
+                                          Text('city:''${employee['city']}'),
+                                        ],
+                                      ),
                                      
                                     ],
                                   ),
