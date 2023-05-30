@@ -35,8 +35,13 @@ class EmployeesList extends StatelessWidget {
                           bottomLeft: Radius.circular(15),
                         ),
                         child: Container(
-                          padding: EdgeInsets.all(10),
-                          color: Color(0xFF16113A),
+                           decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color.fromARGB(255, 139, 124, 247), Color(0xFF1BAFAF)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
                           width: MediaQuery.of(context).size.width * 1,
                           height: 220,
                           child: Row(
@@ -60,7 +65,7 @@ class EmployeesList extends StatelessWidget {
                                     vertical: 10.0, horizontal: 5),
                                 child: DefaultTextStyle(
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.grey.shade800,
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
@@ -78,7 +83,7 @@ class EmployeesList extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            'speciality:''${employee['specialty']} '),
+                                            '${employee['specialty']} '),
                                           
                                          
                                         ],
